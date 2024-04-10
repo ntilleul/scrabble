@@ -9,13 +9,24 @@ public class ScrabbleTest {
 
     @Test
     public void testValue() {
-        Letter letter = new Letter('A');
-        assertEquals('A', letter.value());
+        Letter letterA = new Letter('A', 1);
+        assertEquals('A', letterA.value());
+        assertEquals('A', letterA.value());
     }
 
     @Test
     public void testSetValue() {
-        Letter letter = new Letter('B');
-        assertEquals('B', letter.value());
+        Letter letterB = new Letter('B', 3);
+        assertEquals('B', letterB.value());
+        assertEquals(3, letterB.points());
+    }
+
+    @Test
+    public void testPoints(){
+        Letter letterA = new Letter('A', 1);
+        Letter letterB = new Letter('B', 3);
+
+        assertEquals(1, letterA.points());
+        assertEquals(3, letterB.points());
     }
 }

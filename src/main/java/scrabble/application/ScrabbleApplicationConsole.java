@@ -1,9 +1,5 @@
 package scrabble.application;
 
-import scrabble.model.board.Board;
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Value;
-
 public class ScrabbleApplicationConsole {
 
 

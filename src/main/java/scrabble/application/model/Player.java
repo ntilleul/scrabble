@@ -1,8 +1,8 @@
 package scrabble.application.model;
 
 public class Player {
-    private int point;
-    private String name;
+    private final int point;
+    private final String name;
 
     public Player(String name){
         this.name = name;

@@ -8,7 +8,8 @@ public class Deck {
     private List<Letter> letters;
 
     public Deck(List<Letter> letters){
-        this.letters = letters; 
+
+        this.letters = letters;
     }
 
     public List<Letter> getLetters(){
@@ -16,10 +17,15 @@ public class Deck {
     }
 
     public void addLetter(Letter letter){
+
         letters.add(letter);
     }
 
-    public Letter removeLetter(int index){
-        return letters.remove(index);
+    public void removeLetter(int index){
+        letters.remove(index);
+    }
+
+    public int size() {
+        return letters.size();
     }
 }

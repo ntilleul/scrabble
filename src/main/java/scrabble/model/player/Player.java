@@ -16,15 +16,17 @@ public class Player {
     }
 
     public void setPoint(int p){
+
         point = p;
     }
 
     public void addPoint(int amount){
+
         point += amount;
     }
 
-    public Letter getRid(int index){
-        return deck.removeLetter(index);
+    public void getRid(int index){
+        deck.removeLetter(index);
     }
 
     public void draw(List<Letter> letters){
@@ -34,10 +36,12 @@ public class Player {
     }
 
     public String getName(){
+
         return name;
     }
 
     public int getPoint(){
+
         return point;
     }
 

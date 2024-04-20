@@ -1,33 +1,42 @@
-//We want that on game start, the board displays, and 7 letters are given into the player's deck. The player is able to reroll his letters
-
-
 package scrabble.application.model;
+
 import scrabble.model.board.Board;
 import scrabble.model.player.Player;
-import scrabble.model.player.Deck;
-import scrabble.model.letter.Letter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+public class Game {
 
-public class Game{
-    
     private Board board;
- 
-    
+    private Bag bag;
+    private Player player;
+
     public Game(){
         board = new Board();
+        bag = new Bag();
+        player = new Player("Player", bag.getSevenLetters());
     }
-    
+
     public void start(){
         board.print();
-        Player player = new Player("Player", new ArrayList<>(Arrays.asList(Letter.getRandomLetter(), Letter.getRandomLetter(), Letter.getRandomLetter(), Letter.getRandomLetter(), Letter.getRandomLetter(), Letter.getRandomLetter(), Letter.getRandomLetter())));
         player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
+        System.out.println();
     }
 
-    public static void main(String[] args){
-        Game game = new Game();
-        game.start();
+    public void refillPlayerDeck() {
+        int numPlayerLetters = player.getDeck().size();
+
+        bag.getLetters().addAll(player.getDeck().getLetters());
+
+        bag.shuffleLetters();
+
+        while (!player.getDeck().getLetters().isEmpty()) {
+            player.getRid(0);
+        }
+
+        player.draw(bag.getNLetters(numPlayerLetters));
     }
 
+    public void printPlayerdeck(){
+        player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
+        System.out.println();
+    }
 }

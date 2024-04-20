@@ -1,4 +1,5 @@
 package scrabble.model.letter;
+import java.util.Random;
 
 public enum Letter {
 
@@ -22,4 +23,10 @@ public enum Letter {
     public int getPoints() {
         return this.points;
     }
+
+    public static Letter getRandomLetter() {
+        Random random = new Random();
+        return values()[random.nextInt(values().length)];
+    }
+
 }

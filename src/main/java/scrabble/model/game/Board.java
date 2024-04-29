@@ -1,4 +1,4 @@
-package scrabble.model.board;
+package scrabble.model.game;
 
 public class Board {
 	public Board() {

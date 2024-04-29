@@ -1,5 +1,4 @@
 package scrabble.model.letter;
-import java.util.Random;
 
 public enum Letter {
 

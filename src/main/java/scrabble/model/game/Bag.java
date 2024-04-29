@@ -1,4 +1,4 @@
-package scrabble.application.model;
+package scrabble.model.game;
 
 import java.util.ArrayList;
 import java.util.Collections;

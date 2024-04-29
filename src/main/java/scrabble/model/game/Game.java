@@ -1,6 +1,5 @@
-package scrabble.application.model;
+package scrabble.model.game;
 
-import scrabble.model.board.Board;
 import scrabble.model.player.Player;
 
 public class Game {

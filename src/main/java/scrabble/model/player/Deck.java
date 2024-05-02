@@ -28,4 +28,8 @@ public class Deck {
     public int size() {
         return letters.size();
     }
+
+    public Letter playLetter(int index){
+        return letters.get(index-1);
+    }
 }

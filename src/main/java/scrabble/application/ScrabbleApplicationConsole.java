@@ -8,9 +8,8 @@ public class ScrabbleApplicationConsole {
 		System.out.println("-----------------------------------------------------------------");
 		System.out.println("----------------Bienvenue dans le jeu du scrabble----------------");
 		System.out.println("-----------------------------------------------------------------");
-		Game game = new Game();
-		game.start();
-		game.refillPlayerDeck();
-		game.printPlayerdeck();
+		MainMenu mainMenu = new MainMenu();
+		mainMenu.printStartMenu();
+
 	}
 }

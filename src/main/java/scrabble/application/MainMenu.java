@@ -45,8 +45,6 @@ public class MainMenu {
 
     public void printGameMenu() {
         String choix;
-
-        System.out.println("Affichage du deck . . .\n");
         game.printPlayerdeck();
         Utility utility = new Utility();
 
@@ -63,50 +61,50 @@ public class MainMenu {
             switch (choix) {
                 case "C":
                     System.out.println("\nChangement de vos lettres . . . \n");
-                    System.out.println("Affichage de votre nouveau deck: ");
                     game.refillPlayerDeck();
                     game.printPlayerdeck();
                     break;
                 case "A":
-                    game.refillPlayerDeck();
+                    game.printPlayerdeck();
                     break;
                 case "P":
-                    int nbrLetter = 0;
                     game.printPlayerdeck();
-                    while (true) {
-                        System.out.println("Combien de lettres voulez-vous choisir ? ");
-                        if (scanner.hasNextInt()) {
-                            nbrLetter = scanner.nextInt();
-                            break;
-                        } else {
-                            System.out.println("Veuillez saisir un nombre valide.");
-                            scanner.next();
-                        }
-                    }
-                    if (utility.verifyNumber(nbrLetter, game)){
-                        List<Letter> letters = new ArrayList<>();
-                        for (int i = 0; i < nbrLetter; i++) {
-                            game.printPlayerdeck();
-                            int choixLetter;
-                            boolean isValid = false;
-                            do {
-                                System.out.println("\nSaisir une lettre voulez vous choisir: ");
-                                choixLetter = scanner.nextInt();
-                                if (utility.verifyNumber(choixLetter, game)) {
-                                    isValid = true;
+                    Scanner scanner = new Scanner(System.in);
+                    boolean isWord = false;
+                    List<Letter> mot = new ArrayList<>();
+
+                    while (!isWord) {
+                        System.out.println("\nEntrez le mot que vous souhaitez écrire: ");
+                        String stringInput = scanner.nextLine().toUpperCase();
+
+                        if (utility.verifyNumber(stringInput.length(), game)) {
+                            for (int i = 0; i < stringInput.length(); i++) {
+                                char letterChar = stringInput.charAt(i);
+                                if (Character.isLetter(letterChar)) {
+                                    Letter letter = Letter.valueOf(Character.toString(letterChar));
+                                    if (game.getPlayer().getDeck().getLetters().contains(letter)) {
+                                        mot.add(letter);
+                                        isWord = true;
+                                    } else {
+                                        System.out.println("Vous ne possédez pas toutes ces lettres dans votre deck.");
+                                        mot.clear();
+                                        break;
+                                    }
                                 } else {
-                                    System.out.println("Veuillez saisir un nombre valide.");
+                                    System.out.println("Vous n'avez pas sélectionné uniquement des lettres.");
+                                    mot.clear();
+                                    break;
                                 }
-                            } while (!isValid);
-                            letters.add(game.getPlayer().getDeck().playLetter(choixLetter));
+                            }
+                        } else {
+                            System.out.println("Vous avez saisi un mot trop long.");
                         }
-                        System.out.println("\nVoici votre mot sélectionné: ");
-                        for (Letter lettre : letters) {
-                            System.out.print(lettre.getValue());
-                        }
-                    } else {
-                        System.out.println("Nombre de lettre invalide.");
                     }
+                    System.out.print("Vous allez jouer ce mot: ");
+                    for (Letter letter : mot) {
+                        System.out.print(letter);
+                    }
+                    System.out.println();
                     break;
                 case "Q":
                     System.out.println("\nFermeture du jeu . . .\n");

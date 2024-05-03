@@ -16,12 +16,11 @@ public class Game {
 
     public void start(){
         board.print();
-        player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
         System.out.println();
     }
 
     public void refillPlayerDeck() {
-    	//TODO modify for multiplayer in future
+        //TODO modify for multiplayer in future
         int numPlayerLetters = player.getDeck().size();
 
         bag.getLetters().addAll(player.getDeck().getLetters());
@@ -36,15 +35,16 @@ public class Game {
     }
 
     public void printPlayerdeck(){
+        System.out.println("\nAffichage de votre deck:");
         player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
         System.out.println();
     }
-    
+
     public Player getPlayer() {
-    	return this.player;
+        return this.player;
     }
-    
+
     public Bag getBag() {
-    	return this.bag;
+        return this.bag;
     }
 }

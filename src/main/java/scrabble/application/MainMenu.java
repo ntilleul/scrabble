@@ -2,10 +2,8 @@ package scrabble.application;
 
 import scrabble.model.game.Game;
 import scrabble.model.letter.Letter;
-import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InsufficientLettersException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -47,7 +45,6 @@ public class MainMenu {
     public void printGameMenu() throws InsufficientLettersException {
         String choix;
         game.printPlayerdeck();
-        Utility utility = new Utility();
 
         do {
             System.out.println("\nMENU PRINCIPAL:");
@@ -61,49 +58,28 @@ public class MainMenu {
 
             switch (choix) {
                 case "C":
-                    System.out.println("\nChangement de vos lettres . . . \n");
                     game.refillPlayerDeck();
-                    game.printPlayerdeck();
                     break;
                 case "A":
                     game.printPlayerdeck();
                     break;
                 case "P":
                     game.printPlayerdeck();
-                    Scanner scanner = new Scanner(System.in);
-                    boolean isWord = false;
-                    List<Letter> mot = new ArrayList<>();
 
-                    while (!isWord) {
-                        System.out.println("\nEntrez le mot que vous souhaitez écrire: ");
-                        String stringInput = scanner.nextLine().toUpperCase();
+                    System.out.println("Saisissez votre mot :");
+                    String stringInput = scanner.next().toUpperCase();
 
-                        if (utility.verifyNumber(stringInput.length(), game)) {
-                            for (int i = 0; i < stringInput.length(); i++) {
-                                char letterChar = stringInput.charAt(i);
-                                if (Character.isLetter(letterChar)) {
-                                    Letter letter = Letter.valueOf(Character.toString(letterChar));
-                                    if (game.getPlayer().getDeck().getLetters().contains(letter)) {
-                                        mot.add(letter);
-                                        isWord = true;
-                                    } else {
-                                        System.out.println("Vous ne possédez pas toutes ces lettres dans votre banc.");
-                                        mot.clear();
-                                        break;
-                                    }
-                                } else {
-                                    System.out.println("Vous n'avez pas sélectionné uniquement des lettres.");
-                                    mot.clear();
-                                    break;
-                                }
-                            }
-                        } else {
-                            throw new InsufficientLettersException("Vous n'avez pas suffisamment de lettres pour jouer le mot : " + mot);
-                        }
+                    boolean motInvalide = game.verifWord(stringInput, game);
+                    while (motInvalide) {
+                        System.out.println("Saisissez un nouveau mot: ");
+                        stringInput = scanner.next().toUpperCase();
+                        motInvalide = game.verifWord(stringInput, game);
                     }
-                    System.out.print("Vous allez jouer ce mot: ");
-                    for (Letter letter : mot) {
-                        System.out.print(letter);
+
+                    List<Letter> createdWord = game.createWord(stringInput);
+                    System.out.print("Vous avez joué ce mot :");
+                    for (Letter letter : createdWord) {
+                        System.out.print(letter.getValue());
                     }
                     System.out.println();
                     break;
@@ -115,5 +91,4 @@ public class MainMenu {
             }
         } while (!choix.equals("Q"));
     }
-
 }

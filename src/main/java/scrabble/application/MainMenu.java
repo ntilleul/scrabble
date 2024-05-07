@@ -3,6 +3,7 @@ package scrabble.application;
 import scrabble.model.game.Game;
 import scrabble.model.letter.Letter;
 import scrabble.utilities.Utility;
+import scrabble.utilities.Exceptions.InsufficientLettersException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class MainMenu {
         scanner = new Scanner(System.in);
     }
 
-    public void printStartMenu() {
+    public void printStartMenu() throws InsufficientLettersException {
         String choix;
 
         do {
@@ -43,7 +44,7 @@ public class MainMenu {
         scanner.close();
     }
 
-    public void printGameMenu() {
+    public void printGameMenu() throws InsufficientLettersException {
         String choix;
         game.printPlayerdeck();
         Utility utility = new Utility();

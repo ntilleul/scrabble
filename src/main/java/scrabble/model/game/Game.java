@@ -60,6 +60,10 @@ public class Game {
         boolean motInvalide = false;
 
         while (i < word.length() && !motInvalide) {
+            if (!utility.verifyNumber(word.length(), game)) {
+                System.out.println("Votre mot contient trop de lettres.");
+                motInvalide = true;
+            }
             char letterChar = word.charAt(i);
             if (!utility.verifyLetter(letterChar)) {
                 System.out.println("Votre mot contient des caractères invalides.");

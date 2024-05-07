@@ -1,6 +1,6 @@
 package scrabble.utilities.Exceptions;
 
-public class InsufficientLettersException {
+public class InsufficientLettersException extends Exception {
 
     public InsufficientLettersException() {
         super();

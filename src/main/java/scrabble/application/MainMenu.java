@@ -87,7 +87,7 @@ public class MainMenu {
                                         mot.add(letter);
                                         isWord = true;
                                     } else {
-                                        System.out.println("Vous ne possédez pas toutes ces lettres dans votre deck.");
+                                        System.out.println("Vous ne possédez pas toutes ces lettres dans votre banc.");
                                         mot.clear();
                                         break;
                                     }

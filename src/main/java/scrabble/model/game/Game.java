@@ -35,7 +35,7 @@ public class Game {
     }
 
     public void printPlayerdeck(){
-        System.out.println("\nAffichage de votre deck:");
+        System.out.println("\nAffichage de votre banc:");
         player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
         System.out.println();
     }

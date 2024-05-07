@@ -97,7 +97,7 @@ public class MainMenu {
                                 }
                             }
                         } else {
-                            System.out.println("Vous avez saisi un mot trop long.");
+                            throw new InsufficientLettersException("Vous n'avez pas suffisamment de lettres pour jouer le mot : " + mot);
                         }
                     }
                     System.out.print("Vous allez jouer ce mot: ");

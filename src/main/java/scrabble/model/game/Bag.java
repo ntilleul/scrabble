@@ -39,18 +39,17 @@ public class Bag {
     public List<Letter> getSevenLetters() {
         List<Letter> sevenLetters = new ArrayList<>();
         int count = 0;
-        for (int i = 0; i < letters.size(); i++) {
-            Letter letter = letters.get(i);
-            if (letter.getNumber() > 0) {
-                sevenLetters.add(letter);
-                letter.decrementNumber();
-                letters.remove(i);
-                count++;
-                i--;
-                if (count >= 7) {
-                    break;
-                }
-            }
+        int i=0;
+        while ((i<letters.size()) && count < 7) {
+        	Letter letter = letters.get(i);
+        	if (letter.getNumber() > 0) {
+        		sevenLetters.add(letter);
+        		letter.decrementNumber();
+        		letters.remove(i);
+        		count++;
+        		i--;
+        	}
+        	i++;
         }
         return sevenLetters;
     }

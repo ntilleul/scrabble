@@ -16,7 +16,7 @@ public class MainMenu {
     }
 
     public void printStartMenu() throws InsufficientLettersException {
-        String choix;
+        String choice;
 
         do {
             System.out.println("\nMENU PRINCIPAL:");
@@ -24,9 +24,9 @@ public class MainMenu {
             System.out.println("Q - Quitter");
 
             System.out.print("\nChoisissez une option : ");
-            choix = scanner.next().toUpperCase();
+            choice = scanner.next().toUpperCase();
 
-            switch (choix) {
+            switch (choice) {
                 case "S":
                     System.out.println("\nLancement de la partie . . .\n");
                     game.start();
@@ -36,14 +36,14 @@ public class MainMenu {
                     System.out.println("\nFermeture du jeu . . .\n");
                     break;
                 default:
-                    System.out.println("\nChoix invalide. Veuillez choisir une option valide.\n");
+                    System.out.println("\nchoix invalide. Veuillez choisir une option valide.\n");
             }
-        } while (!choix.equals("Q"));
+        } while (!choice.equals("Q"));
         scanner.close();
     }
 
     public void printGameMenu() throws InsufficientLettersException {
-        String choix;
+        String choice;
         game.printPlayerdeck();
 
         do {
@@ -54,9 +54,9 @@ public class MainMenu {
             System.out.println("Q - Quitter");
 
             System.out.print("\nChoisissez une option : ");
-            choix = scanner.next().toUpperCase();
+            choice = scanner.next().toUpperCase();
 
-            switch (choix) {
+            switch (choice) {
                 case "C":
                     game.refillPlayerDeck();
                     break;
@@ -69,11 +69,11 @@ public class MainMenu {
                     System.out.println("Saisissez votre mot :");
                     String stringInput = scanner.next().toUpperCase();
 
-                    boolean motInvalide = game.verifWord(stringInput, game);
-                    while (motInvalide) {
+                    boolean invalidWord = game.verifWord(stringInput, game);
+                    while (invalidWord) {
                         System.out.println("Saisissez un nouveau mot: ");
                         stringInput = scanner.next().toUpperCase();
-                        motInvalide = game.verifWord(stringInput, game);
+                        invalidWord = game.verifWord(stringInput, game);
                     }
 
                     List<Letter> createdWord = game.createWord(stringInput);
@@ -87,8 +87,8 @@ public class MainMenu {
                     System.out.println("\nFermeture du jeu . . .\n");
                     break;
                 default:
-                    System.out.println("\nChoix invalide. Veuillez choisir une option valide.\n");
+                    System.out.println("\nchoix invalide. Veuillez choisir une option valide.\n");
             }
-        } while (!choix.equals("Q"));
+        } while (!choice.equals("Q"));
     }
 }

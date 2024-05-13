@@ -12,7 +12,9 @@ public class Case {
     public Case(int x, int y, int multiplier) {
         this.x = x;
         this.y = y;
+        this.empty = true;
         this.multiplier = multiplier;
+        
     }
 
     public int getX() {
@@ -32,6 +34,9 @@ public class Case {
     }
 
     public Letter getLetter() {
+    	if (this.isEmpty()) {
+    		return null;
+    	}
         return letter;
     }
 }

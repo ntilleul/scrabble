@@ -77,11 +77,7 @@ public class MainMenu {
                         invalidWord = game.verifWord(stringInput, game);
                     }
 
-                    List<Letter> createdWord = game.createWord(stringInput);
-                    System.out.print("Vous avez joué ce mot :");
-                    for (Letter letter : createdWord) {
-                        System.out.print(letter.getValue());
-                    }
+                    game.playWord(stringInput);
                     System.out.println();
                     break;
                 case "Q":

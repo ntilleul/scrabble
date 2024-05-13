@@ -6,6 +6,7 @@ import scrabble.utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Game {
 
@@ -13,6 +14,7 @@ public class Game {
     private Bag bag;
     private Player player;
     Utility utility = new Utility();
+    Scanner scanner = new Scanner(System.in);
 
     public Game() {
         board = new Board();
@@ -82,8 +84,6 @@ public class Game {
         return false;
     }
 
-
-
     public List<Letter> createWord(String word) {
         List<Letter> letterList = new ArrayList<>();
         for (int i = 0; i < word.length(); i++) {
@@ -97,6 +97,24 @@ public class Game {
             letterList.add(letter);
         }
         return letterList;
+    }
+
+    public void playWord(String stringInput){
+        System.out.println("Voulez vous jouer ce mot ? (O/N)");
+        String choice = scanner.next().toUpperCase();
+        int wordSize = stringInput.length();
+        System.out.println(wordSize);
+        if (choice.equals("O")) {
+            List<Letter> createdWord = createWord(stringInput);
+            for (Letter letter : createdWord) {
+                player.getDeck().getLetters().remove(letter);
+            }
+            player.draw(bag.getNLetters(wordSize));
+
+            System.out.println("Vous avez jouer ce mot: " + stringInput);
+        }else{
+            System.out.println("Vous avez annulé votre mot.");
+        }
     }
 }
 

@@ -59,7 +59,7 @@ public class Bag {
         List<Letter> nLetters = new ArrayList<>();
         int count = 0;
         int i = 0;
-        while(i<n) {
+        while((i<n) && (count < 7)) {
             Letter letter = letters.get(i);
             if (letter.getNumber() > 0) {
                 nLetters.add(letter);
@@ -67,9 +67,6 @@ public class Bag {
                 letters.remove(i);
                 count++;
                 i--;
-                if (count >= 7) {
-                    break;
-                }
             }
             i++;
         }

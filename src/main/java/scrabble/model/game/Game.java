@@ -28,9 +28,11 @@ public class Game {
     public void refillPlayerDeck() {
         //TODO modify for multiplayer in future
         int numPlayerLetters = player.getDeck().size();
-
-        bag.getLetters().addAll(player.getDeck().getLetters());
-
+        bag.printBag();
+        for(Letter letter : player.getDeck().getLetters()) {
+            bag.addLetters(letter);
+        }
+        bag.printBag();
         bag.shuffleLetters();
 
         while (!player.getDeck().getLetters().isEmpty()) {
@@ -38,6 +40,8 @@ public class Game {
         }
 
         player.draw(bag.getNLetters(numPlayerLetters));
+
+        bag.printBag();
     }
 
     public void printPlayerdeck() {

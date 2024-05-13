@@ -59,6 +59,7 @@ public class MainMenu {
             switch (choice) {
                 case "C":
                     game.refillPlayerDeck();
+                    game.printPlayerdeck();
                     break;
                 case "A":
                     game.printPlayerdeck();

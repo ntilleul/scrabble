@@ -33,5 +33,7 @@ public enum Letter {
         this.number--;
     }
 
-
+    public void incrementNumber() {
+        this.number++;
+    }
 }

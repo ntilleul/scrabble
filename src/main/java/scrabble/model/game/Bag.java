@@ -27,6 +27,7 @@ public class Bag {
 
     public void addLetters(Letter letter) {
             letters.add(letter);
+            letter.incrementNumber();
     }
 
     public void shuffleLetters() {
@@ -39,7 +40,7 @@ public class Bag {
     public List<Letter> getSevenLetters() {
         List<Letter> sevenLetters = new ArrayList<>();
         int count = 0;
-        int i=0;
+        int i = 0;
         while ((i<letters.size()) && count < 7) {
         	Letter letter = letters.get(i);
         	if (letter.getNumber() > 0) {
@@ -57,7 +58,8 @@ public class Bag {
     public List<Letter> getNLetters(int n ){
         List<Letter> nLetters = new ArrayList<>();
         int count = 0;
-        for (int i = 0; i < n; i++) {
+        int i = 0;
+        while(i<n) {
             Letter letter = letters.get(i);
             if (letter.getNumber() > 0) {
                 nLetters.add(letter);
@@ -69,9 +71,16 @@ public class Bag {
                     break;
                 }
             }
+            i++;
         }
         return nLetters;
     }
 
+    //afficher le contenu du bag
+    public void printBag() {
+        System.out.println("\nAffichage du sac:");
+        letters.forEach(letter -> System.out.print(letter.getValue() + " "));
+        System.out.println();
+    }
 
 }

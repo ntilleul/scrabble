@@ -19,7 +19,7 @@ public class Utility {
         return alphabet.contains(letter);
     }
 
-    public boolean verifyContainsLetterInDeck(Letter letter, Game game){
-        return game.getPlayer().getDeck().getLetters().contains(letter);
+    public boolean verifyContainsLetterInDeck(Letter letter, List<Letter> deck){
+        return deck.contains(letter);
     }
 }

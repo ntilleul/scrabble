@@ -55,19 +55,15 @@ public class Game {
     }
 
     public boolean verifWord(String word, Game game) {
+        List<Letter> deck = new ArrayList<>(player.getDeck().getLetters());
 
-        int i = 0;
-        boolean invalidWord = false;
+        List<Letter> availableLetters = new ArrayList<>(deck);
 
-        while (i < word.length() && !invalidWord) {
-            if (!utility.verifyNumber(word.length(), game)) {
-                System.out.println("Votre mot contient trop de lettres.");
-                invalidWord = true;
-            }
+        for (int i = 0; i < word.length(); i++) {
             char letterChar = word.charAt(i);
             if (!utility.verifyLetter(letterChar)) {
                 System.out.println("Votre mot contient des caractères invalides.");
-                invalidWord = true;
+                return true;
             } else {
                 Letter letter;
                 if (letterChar == '?') {
@@ -75,15 +71,18 @@ public class Game {
                 } else {
                     letter = Letter.valueOf(Character.toString(letterChar));
                 }
-                if (!utility.verifyContainsLetterInDeck(letter, game)) {
+                if (!availableLetters.contains(letter)) {
                     System.out.println("Vous ne possédez pas toutes ces lettres dans votre deck.");
-                    invalidWord = true;
+                    return true;
+                } else {
+                    availableLetters.remove(letter);
                 }
             }
-            i++;
         }
-        return invalidWord;
+        return false;
     }
+
+
 
     public List<Letter> createWord(String word) {
         List<Letter> letterList = new ArrayList<>();

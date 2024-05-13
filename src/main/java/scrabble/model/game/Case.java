@@ -39,4 +39,11 @@ public class Case {
     	}
         return letter;
     }
+    
+    public String toString() {
+    	if (this.getLetter() != null) {
+    		return this.getLetter().toString();
+    	}
+    	return " ";
+    }
 }

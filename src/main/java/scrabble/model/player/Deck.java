@@ -32,4 +32,8 @@ public class Deck {
     public Letter playLetter(int index){
         return letters.get(index-1);
     }
+
+    public boolean isEmpty() {
+        return letters.isEmpty();
+    }
 }

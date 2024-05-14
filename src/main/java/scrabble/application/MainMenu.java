@@ -86,6 +86,11 @@ public class MainMenu {
                 default:
                     System.out.println("\nchoix invalide. Veuillez choisir une option valide.\n");
             }
-        } while (!choice.equals("Q"));
+        } while ((!choice.equals("Q")) && (!game.verifWin(game)));
+
+        //TODO : afficher le message avec le nom du joueur pour la suite
+        if(game.verifWin(game)){
+            System.out.println("Félicitations, vous avez gagné !");
+        }
     }
 }

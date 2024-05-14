@@ -116,5 +116,9 @@ public class Game {
             System.out.println("Vous avez annulé votre mot.");
         }
     }
+
+    public boolean verifWin(Game game) {
+        return game.getBag().getLetters().isEmpty() && game.getPlayer().getDeck().isEmpty();
+    }
 }
 

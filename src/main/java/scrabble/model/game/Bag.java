@@ -15,7 +15,7 @@ public class Bag {
         initializeLetters();
     }
 
-    private void initializeLetters() {
+    public void initializeLetters() {
         for (Letter letter : Letter.values()) {
             int numberOfLetters = letter.getNumber();
             for (int i = 0; i < numberOfLetters; i++) {
@@ -78,5 +78,4 @@ public class Bag {
         letters.forEach(letter -> System.out.print(letter.getValue() + " "));
         System.out.println();
     }
-
 }

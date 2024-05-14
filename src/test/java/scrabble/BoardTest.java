@@ -11,6 +11,16 @@ public class BoardTest {
 	@Test
 	public void isEmptyCaseNewBoard() {
 		Board board = new Board();
-		assertEquals(true, board.getCase(1,2).isEmpty());
+		boolean isEmpty = board.getCase(1,1).isEmpty();
+		assertEquals(true, isEmpty);
 	}
+
+	@Test
+	public void isCaseMultiplierEquals1(){
+		Board board = new Board();
+		int multiplier = board.getCase(1,1).getMultiplier();
+		assertEquals(1, multiplier);
+	}
+
+
 }

@@ -30,8 +30,5 @@ public class PlayerTest {
 	    	}
 	    	testGame.refillPlayerDeck();
 	    	assertNotEquals(oldDeck, testGame.getPlayer().getDeck());
-	    	
-	    	
 	    }
-
 }

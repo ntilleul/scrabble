@@ -1,10 +1,8 @@
 package scrabble.application;
 
 import scrabble.model.game.Game;
-import scrabble.model.letter.Letter;
 import scrabble.utilities.Exceptions.InsufficientLettersException;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class MainMenu {

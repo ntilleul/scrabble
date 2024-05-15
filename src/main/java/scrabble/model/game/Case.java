@@ -5,16 +5,13 @@ import scrabble.model.letter.Letter;
 public class Case {
     private int x;
     private int y;
-    private boolean empty;
-    private int multiplier;
+    private Multiplier multiplier;
     private Letter letter;
 
-    public Case(int x, int y, int multiplier) {
+    public Case(int x, int y, Multiplier multiplier) {
         this.x = x;
         this.y = y;
-        this.empty = true;
         this.multiplier = multiplier;
-        
     }
 
     public int getX() {
@@ -25,25 +22,30 @@ public class Case {
         return y;
     }
 
-    public boolean isEmpty() {
-        return empty;
-    }
-
-    public int getMultiplier() {
+    public Multiplier getMultiplier() {
         return multiplier;
     }
 
+    public void setMultiplier(Multiplier multiplier) {
+        this.multiplier = multiplier;
+    }
+
     public Letter getLetter() {
-    	if (this.isEmpty()) {
-    		return null;
-    	}
-        return letter;
+    	return letter;
+    }
+
+    public void setLetter(Letter letter) {
+        this.letter = letter;
+    }
+
+    public boolean isEmpty() {
+        return letter == null;
     }
     
     public String toString() {
-    	if (this.getLetter() != null) {
-    		return this.getLetter().toString();
-    	}
-    	return " ";
+    	if (isEmpty()) 
+    		return this.multiplier.toString();
+    	else 
+            return " " + this.letter.toString() + " ";
     }
 }

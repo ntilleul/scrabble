@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import scrabble.model.game.Board;
+import scrabble.model.game.Multiplier;
 
 public class BoardTest {
 	
@@ -18,7 +19,7 @@ public class BoardTest {
 	@Test
 	public void isCaseMultiplierEquals1(){
 		Board board = new Board();
-		int multiplier = board.getCase(1,1).getMultiplier();
+		Multiplier multiplier = board.getCase(1,1).getMultiplier();
 		assertEquals(1, multiplier);
 	}
 

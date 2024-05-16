@@ -103,15 +103,18 @@ public class Game {
         System.out.println("Voulez vous jouer ce mot ? (O/N)");
         String choice = scanner.next().toUpperCase();
         int wordSize = stringInput.length();
+        int wordPoints = 0;
         System.out.println(wordSize);
         if (choice.equals("O")) {
             List<Letter> createdWord = createWord(stringInput);
             for (Letter letter : createdWord) {
+                wordPoints = wordPoints + letter.getPoints();
+                player.addPoint(letter.getPoints());
                 player.getDeck().getLetters().remove(letter);
             }
             player.draw(bag.getNLetters(wordSize));
-
             System.out.println("Vous avez jouer ce mot: " + stringInput);
+            System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de " + player.getPoint() + " points.");
         }else{
             System.out.println("Vous avez annulé votre mot.");
         }

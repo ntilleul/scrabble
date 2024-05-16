@@ -11,7 +11,7 @@ public class Utility {
         return number > 0 && number <= game.getPlayer().getDeck().size();
     }
 
-    public boolean verifyLetter(char letter){
+    public static boolean verifyLetter(char letter){
         List<Character> alphabet = Arrays.asList(
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '?'

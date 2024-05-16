@@ -16,38 +16,39 @@ public class Board {
 				board[i][j]=new Case(i, j, Multiplier.DEFAULT);
 			}
 		}
-		board[0][0].setMultiplier(Multiplier.MOT_3);
-		board[0][7].setMultiplier(Multiplier.MOT_3);
-		board[0][14].setMultiplier(Multiplier.MOT_3);
 
-		board[7][0].setMultiplier(Multiplier.MOT_3);
-		board[7][7].setMultiplier(Multiplier.MOT_3);
-		board[7][14].setMultiplier(Multiplier.MOT_3);
+		board[0][0].setMultiplier(Multiplier.WORD_3);
+		board[0][7].setMultiplier(Multiplier.WORD_3);
+		board[0][14].setMultiplier(Multiplier.WORD_3);
 
-		board[14][0].setMultiplier(Multiplier.MOT_3);
-		board[14][7].setMultiplier(Multiplier.MOT_3);
-		board[14][14].setMultiplier(Multiplier.MOT_3);
+		board[7][0].setMultiplier(Multiplier.WORD_3);
+		board[7][7].setMultiplier(Multiplier.WORD_3);
+		board[7][14].setMultiplier(Multiplier.WORD_3);
+
+		board[14][0].setMultiplier(Multiplier.WORD_3);
+		board[14][7].setMultiplier(Multiplier.WORD_3);
+		board[14][14].setMultiplier(Multiplier.WORD_3);
 
 
-		board[1][1].setMultiplier(Multiplier.MOT_2);
-		board[2][2].setMultiplier(Multiplier.MOT_2);
-		board[3][3].setMultiplier(Multiplier.MOT_2);
-		board[4][4].setMultiplier(Multiplier.MOT_2);
+		board[1][1].setMultiplier(Multiplier.WORD_2);
+		board[2][2].setMultiplier(Multiplier.WORD_2);
+		board[3][3].setMultiplier(Multiplier.WORD_2);
+		board[4][4].setMultiplier(Multiplier.WORD_2);
 
-		board[1][13].setMultiplier(Multiplier.MOT_2);
-		board[2][12].setMultiplier(Multiplier.MOT_2);
-		board[3][11].setMultiplier(Multiplier.MOT_2);
-		board[4][10].setMultiplier(Multiplier.MOT_2);
+		board[1][13].setMultiplier(Multiplier.WORD_2);
+		board[2][12].setMultiplier(Multiplier.WORD_2);
+		board[3][11].setMultiplier(Multiplier.WORD_2);
+		board[4][10].setMultiplier(Multiplier.WORD_2);
 
-		board[13][1].setMultiplier(Multiplier.MOT_2);
-		board[12][2].setMultiplier(Multiplier.MOT_2);
-		board[11][3].setMultiplier(Multiplier.MOT_2);
-		board[10][4].setMultiplier(Multiplier.MOT_2);
+		board[13][1].setMultiplier(Multiplier.WORD_2);
+		board[12][2].setMultiplier(Multiplier.WORD_2);
+		board[11][3].setMultiplier(Multiplier.WORD_2);
+		board[10][4].setMultiplier(Multiplier.WORD_2);
 
-		board[13][13].setMultiplier(Multiplier.MOT_2);
-		board[12][12].setMultiplier(Multiplier.MOT_2);
-		board[11][11].setMultiplier(Multiplier.MOT_2);
-		board[10][10].setMultiplier(Multiplier.MOT_2);
+		board[13][13].setMultiplier(Multiplier.WORD_2);
+		board[12][12].setMultiplier(Multiplier.WORD_2);
+		board[11][11].setMultiplier(Multiplier.WORD_2);
+		board[10][10].setMultiplier(Multiplier.WORD_2);
 
 
 		board[0][3].setMultiplier(Multiplier.LETTER_2);

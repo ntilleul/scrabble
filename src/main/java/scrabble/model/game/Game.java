@@ -32,6 +32,7 @@ public class Game {
         int numPlayerLetters = player.getDeck().size();
         for(Letter letter : player.getDeck().getLetters()) {
             bag.addLetters(letter);
+            letter.incrementNumber();
         }
         bag.shuffleLetters();
 
@@ -63,13 +64,13 @@ public class Game {
 
         for (int i = 0; i < word.length(); i++) {
             char letterChar = word.charAt(i);
-            if (!utility.verifyLetter(letterChar)) {
+            if (!Utility.verifyLetter(letterChar)) {
                 System.out.println("Votre mot contient des caractères invalides.");
                 return true;
             } else {
                 Letter letter;
                 if (letterChar == '?') {
-                    letter = Letter.JOKER;
+                	letter = Letter.JOKER;
                 } else {
                     letter = Letter.valueOf(Character.toString(letterChar));
                 }
@@ -90,7 +91,7 @@ public class Game {
             char letterChar = word.charAt(i);
             Letter letter;
             if (letterChar == '?') {
-                letter = Letter.JOKER;
+            	letter = Letter.JOKER;
             } else {
                 letter = Letter.valueOf(Character.toString(letterChar));
             }
@@ -104,7 +105,6 @@ public class Game {
         String choice = scanner.next().toUpperCase();
         int wordSize = stringInput.length();
         int wordPoints = 0;
-        System.out.println(wordSize);
         if (choice.equals("O")) {
             List<Letter> createdWord = createWord(stringInput);
             for (Letter letter : createdWord) {
@@ -112,6 +112,17 @@ public class Game {
                 player.addPoint(letter.getPoints());
                 player.getDeck().getLetters().remove(letter);
             }
+            char tempC;
+            String tempS = "";
+            for (int i=0; i<stringInput.length();i++) {
+            	if (stringInput.charAt(i) == '?') {
+            		tempC = Letter.changeJokerValue();
+            		tempS = tempS + tempC;
+            	} else {
+            		tempS = tempS + stringInput.charAt(i);
+            	}
+            }
+            stringInput = tempS;
             player.draw(bag.getNLetters(wordSize));
             System.out.println("Vous avez jouer ce mot: " + stringInput);
             System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de " + player.getPoint() + " points.");

@@ -14,7 +14,7 @@ public enum Letter {
     private char value;
     private final int points;
     private int number;
-    private Scanner scanner;
+    private static Scanner scanner;
 
     Letter(char value, int points, int number) {
         this.value = value;
@@ -42,7 +42,7 @@ public enum Letter {
         this.number++;
     }
     
-    public void changeJokerValue() {
+    public static char changeJokerValue() {
     	String choice;
     	char newValue;
     	scanner = new Scanner(System.in);
@@ -53,6 +53,7 @@ public enum Letter {
     		choice = scanner.next().toUpperCase();
     	}
     	newValue = choice.charAt(0);
-    	this.value = newValue;
+    	return newValue;
+    	
     }
 }

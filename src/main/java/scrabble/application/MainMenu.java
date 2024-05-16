@@ -72,7 +72,7 @@ public class MainMenu {
                     while (invalidWord) {
                         System.out.println("Saisissez un nouveau mot: ");
                         stringInput = scanner.next().toUpperCase();
-                        invalidWord = game.verifWord(stringInput, game);
+                        invalidWord = game.verifWord(stringInput, game);  
                     }
 
                     game.playWord(stringInput);

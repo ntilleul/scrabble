@@ -1,6 +1,7 @@
 package scrabble;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -13,14 +14,14 @@ public class BoardTest {
 	public void isEmptyCaseNewBoard() {
 		Board board = new Board();
 		boolean isEmpty = board.getCase(1,1).isEmpty();
-		assertEquals(true, isEmpty);
+        assertTrue(isEmpty);
 	}
 
 	@Test
 	public void isCaseMultiplierEquals1(){
 		Board board = new Board();
 		Multiplier multiplier = board.getCase(1,1).getMultiplier();
-		assertEquals(1, multiplier);
+		assertEquals(Multiplier.WORD_2, multiplier);
 	}
 
 

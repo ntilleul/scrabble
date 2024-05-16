@@ -22,4 +22,9 @@ public class Utility {
     public boolean verifyContainsLetterInDeck(Letter letter, List<Letter> deck){
         return deck.contains(letter);
     }
+
+    public static int changeASCII(char letter) {
+        letter = Character.toLowerCase(letter);
+        return letter - 'a' + 1;
+    }
 }

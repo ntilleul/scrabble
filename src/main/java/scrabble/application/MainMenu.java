@@ -40,7 +40,7 @@ public class MainMenu {
         scanner.close();
     }
 
-    public void printGameMenu() throws InsufficientLettersException {
+    public void printGameMenu() {
         String choice;
         game.printPlayerdeck();
 
@@ -68,11 +68,11 @@ public class MainMenu {
                     System.out.println("Saisissez votre mot :");
                     String stringInput = scanner.next().toUpperCase();
 
-                    boolean invalidWord = game.verifWord(stringInput, game);
+                    boolean invalidWord = game.verifWord(stringInput);
                     while (invalidWord) {
                         System.out.println("Saisissez un nouveau mot: ");
                         stringInput = scanner.next().toUpperCase();
-                        invalidWord = game.verifWord(stringInput, game);  
+                        invalidWord = game.verifWord(stringInput);
                     }
 
                     game.playWord(stringInput);

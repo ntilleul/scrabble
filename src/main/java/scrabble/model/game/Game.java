@@ -176,18 +176,18 @@ public class Game {
 
     private void placeWord(List<Letter> word, String direction, int x, int y) {
         if (direction.equals("H")) {
-            if(!board.getCase(x - 1, y - 1).isEmpty()){
-                y++;
-            }
             for (int i = 0; i < word.size(); i++) {
+                while(!board.getCase(x - 1, y + i - 1).isEmpty()){
+                    y++;
+                }
                 board.getCase(x - 1, y + i - 1).setLetter(word.get(i));
             }
         } else {
-            if(!board.getCase(x - 1, y - 1).isEmpty()){
-                x++;
-            }
             for (int i = 0; i < word.size(); i++) {
-                board.getCase(x - 1, y + i - 1).setLetter(word.get(i));
+                while(!board.getCase(x + i - 1, y - 1).isEmpty()){
+                    x++;
+                }
+                board.getCase(x + i - 1, y - 1).setLetter(word.get(i));
             }
         }
     }

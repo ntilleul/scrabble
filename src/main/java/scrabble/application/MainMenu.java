@@ -74,7 +74,9 @@ public class MainMenu {
                         stringInput = scanner.next().toUpperCase();
                         invalidWord = game.verifWord(stringInput);
                     }
-
+                    
+                    
+                    
                     game.playWord(stringInput);
                     System.out.println();
                     break;

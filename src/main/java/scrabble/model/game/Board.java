@@ -120,16 +120,4 @@ public class Board {
 		}
 		System.out.println("──┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘");
 	}
-
-
-	public boolean firstWordIsOnStar(String word, int x, int y, char dir) {
-		int length = word.length()-1;
-		if ((x > 7) || (y > 7)) {
-			return false;
-		}
-		if (((dir == 'H') && (length +  y >= 7))||((dir == 'V') && (length +  x >= 7)) ) {
-			return true;
-		}
-		return false;
-	}
 }

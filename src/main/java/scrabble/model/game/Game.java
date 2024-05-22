@@ -139,38 +139,39 @@ public class Game {
     }
 
     public void printWord(List<Letter> word) {
-        String direction;
-        char column;
-        int x;
-        int y;
-        if (wordCount ==0){
-            x = 8;
-            y = 8;
-            System.out.println("Dans quelle direction voulez-vous placer votre mot ? (H/V)");
-            direction = scanner.next().toUpperCase();
-            placeWord(word, direction, x, y);
-        }else{
-            System.out.println("Dans quelle direction voulez-vous placer votre mot ? (H/V)");
-            direction = scanner.next().toUpperCase();
-            while (true) {
-                System.out.println("A quelle position voulez-vous placer votre mot ? (x y)");
-                column = scanner.next().charAt(0);
-                column = Character.toUpperCase(column);
-                x = changeASCII(column);
-                y = scanner.nextInt();
-                if (column < 'A' || column > 'O') {
-                    System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
-                    continue;
-                }
-                if (y < 1 || y > 15) {
-                    System.out.println("Erreur : y doit être un entier entre 1 et 15.");
-                    continue;
-                }
-                break;
+        String direction = "";
+        char column = ' ';
+		boolean tf = true;
+        int x = 0;
+        int y = 0;
+        System.out.println("Dans quelle direction voulez-vous placer votre mot ? (H/V)");
+        direction = scanner.next().toUpperCase();
+        while (tf) {
+			if (this.wordCount == 0) {
+            	tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15)) || (!firstWordIsOnStar(word, x, y, direction));
+        	} else {
+				tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15));
+			}
+            System.out.println("A quelle position voulez-vous placer votre mot ? (x y)");
+            column = scanner.next().charAt(0);
+            column = Character.toUpperCase(column);
+            x = changeASCII(column);
+            y = scanner.nextInt();
+            if (column < 'A' || column > 'O') {
+                System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
+                continue;
+			}
+            if (y < 1 || y > 15) {
+                System.out.println("Erreur : y doit être un entier entre 1 et 15.");
+                continue;
+            } 
+            if (!firstWordIsOnStar(word, x, y, direction)) {
+            	System.out.println("Erreur : le mot doit passer par la case centrale.");
+            	continue;
             }
-            placeWord(word, direction, y, x);
         }
-        wordCount++;
+        placeWord(word, direction, y, x);
+        this.wordCount++;
         board.print();
     }
 
@@ -192,14 +193,16 @@ public class Game {
         }
     }
     
-	public boolean firstWordIsOnStar(String word, int x, int y, char dir) {
-		int length = word.length()-1;
-		if ((x > 7) || (y > 7)) {
+	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, String dir) {
+		int length = word.size();
+		
+		if ((x > 8) || (y > 8)) {
 			return false;
 		}
-		if (((dir == 'H') && (length +  y >= 7))||((dir == 'V') && (length +  x >= 7)) ) {
+		if (((dir == "H") && ((length + y) >= 8)) || ((dir == "V") && ((length +  x) >= 8)) ) {
 			return true;
 		}
+		System.out.println(length + y); //TODO régler ce pb de golmon
 		return false;
 	}
 }

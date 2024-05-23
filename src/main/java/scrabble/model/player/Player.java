@@ -15,13 +15,11 @@ public class Player {
         point = 0;
     }
 
-    public void setPoint(int p){
-
-        point = p;
+    public void setPoint(int point){
+        this.point = point;
     }
 
     public void addPoint(int amount){
-
         point += amount;
     }
 

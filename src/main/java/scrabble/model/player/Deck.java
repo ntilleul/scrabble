@@ -17,7 +17,6 @@ public class Deck {
     }
 
     public void addLetter(Letter letter){
-
         letters.add(letter);
     }
 

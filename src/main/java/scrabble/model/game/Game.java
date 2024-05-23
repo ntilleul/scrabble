@@ -71,7 +71,7 @@ public class Game {
                 return true;
             } else {
                 Letter letter;
-                if (letterChar == '?') {
+                if (letterChar == Letter.JOKER.getValue()) {
                     letter = Letter.JOKER;
                 } else {
                     letter = Letter.valueOf(Character.toString(letterChar));
@@ -92,7 +92,7 @@ public class Game {
         for (int i = 0; i < word.length(); i++) {
             char letterChar = word.charAt(i);
             Letter letter;
-            if (letterChar == '?') {
+            if (letterChar == Letter.JOKER.getValue()) {
                 letter = Letter.JOKER;
             } else {
                 letter = Letter.valueOf(Character.toString(letterChar));
@@ -117,7 +117,7 @@ public class Game {
             char tempC;
             String tempS = "";
             for (int i = 0; i < stringInput.length(); i++) {
-                if (stringInput.charAt(i) == '?') {
+                if (stringInput.charAt(i) == Letter.JOKER.getValue()) {
                     tempC = Letter.changeJokerValue();
                     tempS = tempS + tempC;
                 } else {
@@ -144,13 +144,23 @@ public class Game {
 		boolean tf = true;
         int x = 0;
         int y = 0;
-        System.out.println("Dans quelle direction voulez-vous placer votre mot ? (H/V)");
-        direction = scanner.next().toUpperCase();
+        
+        
+        do {
+            System.out.println("Dans quelle direction voulez-vous placer votre mot ? (" + Direction.HORIZONTAL.getCommand() + "/" + Direction.VERTICAL.getCommand() + ")");
+            direction = scanner.next().toUpperCase();
+            System.out.println(direction);
+            System.out.println(Direction.HORIZONTAL.getCommand());
+            System.out.println((direction.equals(Direction.HORIZONTAL.getCommand())));;
+            if ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) )
+                System.err.println("Commande inconnu.");
+        } while ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) );
+        
         while (tf) {
 			if (wordCount == 0) {
-            	tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15)) || (!firstWordIsOnStar(word, x, y, direction));
+            	tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > board.getSize())) || (!firstWordIsOnStar(word, x, y, direction));
         	} else {
-				tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15));
+				tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > board.getSize()));
 			}
             System.out.println("A quelle position voulez-vous placer votre mot ? (x y)");
             column = scanner.next().charAt(0);
@@ -159,17 +169,15 @@ public class Game {
             y = scanner.nextInt();
             if (column < 'A' || column > 'O') {
                 System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
-                continue;
 			}
-            if (y < 1 || y > 15) {
-                System.out.println("Erreur : y doit être un entier entre 1 et 15.");
-                continue;
+            else if (y < 1 || y > board.getSize()) {
+                System.out.println("Erreur : y doit être un entier entre 1 et " + Integer.toString(board.getSize())  + ".");
             } 
-            if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
+            else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
             	System.out.println("Erreur : le mot doit passer par la case centrale.");
-                continue;
             }
-            tf = false;
+            else
+                tf = false;
         }
         placeWord(word, direction, y, x);
         wordCount++;
@@ -177,7 +185,7 @@ public class Game {
     }
 
     private void placeWord(List<Letter> word, String direction, int x, int y) {
-        if (direction.equals("H")) {
+        if (direction.equals(Direction.HORIZONTAL.getCommand())) {
             for (int i = 0; i < word.size(); i++) {
                 while(!board.getCase(x - 1, y + i - 1).isEmpty()){
                     y++;
@@ -195,21 +203,21 @@ public class Game {
     }
     
 	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, String dir) {
-        if (dir.equals("H")) {
-            if (x + word.size() < 8 || x > 8) {
+        if (dir.equals(Direction.HORIZONTAL.getCommand())) {
+            if (x + word.size() < board.getMiddleSize() || x > board.getMiddleSize()) {
                 return false;
             }
             for (int i = 0; i < word.size(); i++) {
-                if (x + i == 8 && y == 8) {
+                if (x + i == board.getMiddleSize() && y == board.getMiddleSize()) {
                     return true;
                 }
             }
         } else {
-            if (y + word.size() < 8 || y > 8) {
+            if (y + word.size() < board.getMiddleSize() || y > board.getMiddleSize()) {
                 return false;
             }
             for (int i = 0; i < word.size(); i++) {
-                if (y + i == 8 && x == 8) {
+                if (y + i == board.getMiddleSize() && x == board.getMiddleSize()) {
                     return true;
                 }
             }

@@ -1,6 +1,5 @@
 package scrabble.application;
 
-import scrabble.model.game.*;
 import scrabble.utilities.Exceptions.InsufficientLettersException;
 
 public class ScrabbleApplicationConsole {

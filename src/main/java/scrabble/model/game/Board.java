@@ -1,18 +1,14 @@
 package scrabble.model.game;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
-import scrabble.model.letter.Letter;
-
 public class Board {
 	
 	public Case[][] board;
+	private final int boardSize = 15;
 
 	public Board() {
-		board = new Case[15][15];
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<15; j++) {
+		board = new Case[boardSize][boardSize];
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
 				board[i][j]=new Case(i, j, Multiplier.DEFAULT);
 			}
 		}
@@ -108,8 +104,8 @@ public class Board {
 	
 	public void print() {
 		System.out.println("  | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O |");
-		for (int i=0; i<15;i++) {
-			if (i < 9) {
+		for (int i = 0; i < boardSize; i++) {
+			if (i <= getMiddleSize()) {
 				System.out.println("──┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤");
 				System.out.println("0"+(i+1)+"|"+this.board[i][0]+"|"+this.board[i][1]+"|"+this.board[i][2]+"|"+this.board[i][3]+"|"+this.board[i][4]+"|"+this.board[i][5]+"|"+this.board[i][6]+"|"+this.board[i][7]+"|"+this.board[i][8]+"|"+this.board[i][9]+"|"+this.board[i][10]+"|"+this.board[i][11]+"|"+this.board[i][12]+"|"+this.board[i][13]+"|"+this.board[i][14]+"|");
 			}
@@ -119,5 +115,13 @@ public class Board {
 			}
 		}
 		System.out.println("──┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘");
+	}
+
+	public int getSize() {
+		return this.boardSize;
+	}
+
+	public int getMiddleSize() {
+		return boardSize / 2 +1;
 	}
 }

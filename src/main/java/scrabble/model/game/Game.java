@@ -147,7 +147,7 @@ public class Game {
         System.out.println("Dans quelle direction voulez-vous placer votre mot ? (H/V)");
         direction = scanner.next().toUpperCase();
         while (tf) {
-			if (this.wordCount == 0) {
+			if (wordCount == 0) {
             	tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15)) || (!firstWordIsOnStar(word, x, y, direction));
         	} else {
 				tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > 15));
@@ -165,13 +165,14 @@ public class Game {
                 System.out.println("Erreur : y doit être un entier entre 1 et 15.");
                 continue;
             } 
-            if (!firstWordIsOnStar(word, x, y, direction)) {
+            if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
             	System.out.println("Erreur : le mot doit passer par la case centrale.");
-            	continue;
+                continue;
             }
+            tf = false;
         }
         placeWord(word, direction, y, x);
-        this.wordCount++;
+        wordCount++;
         board.print();
     }
 
@@ -194,16 +195,26 @@ public class Game {
     }
     
 	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, String dir) {
-		int length = word.size();
-		
-		if ((x > 8) || (y > 8)) {
-			return false;
-		}
-		if (((dir == "H") && ((length + y) >= 8)) || ((dir == "V") && ((length +  x) >= 8)) ) {
-			return true;
-		}
-		System.out.println(length + y); //TODO régler ce pb de golmon
-		return false;
+        if (dir.equals("H")) {
+            if (x + word.size() < 8 || x > 8) {
+                return false;
+            }
+            for (int i = 0; i < word.size(); i++) {
+                if (x + i == 8 && y == 8) {
+                    return true;
+                }
+            }
+        } else {
+            if (y + word.size() < 8 || y > 8) {
+                return false;
+            }
+            for (int i = 0; i < word.size(); i++) {
+                if (y + i == 8 && x == 8) {
+                    return true;
+                }
+            }
+        }
+        return false;
 	}
 }
 

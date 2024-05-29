@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static scrabble.utilities.Utility.changeASCII;
-
 public class Game {
 
     private Board board;
@@ -30,7 +28,7 @@ public class Game {
     }
 
     public void refillPlayerDeck() {
-        //TODO modify for multiplayer in future
+        // TODO modify for multiplayer in future
         int numPlayerLetters = player.getDeck().size();
         for (Letter letter : player.getDeck().getLetters()) {
             bag.addLetters(letter);
@@ -128,7 +126,8 @@ public class Game {
             player.draw(bag.getNLetters(wordSize));
             System.out.println("Vous avez jouer ce mot: " + stringInput);
             printWord(createdWord);
-            System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de " + player.getPoint() + " points.");
+            System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de "
+                    + player.getPoint() + " points.");
         } else {
             System.out.println("Vous avez annulé votre mot.");
         }
@@ -139,44 +138,55 @@ public class Game {
     }
 
     public void printWord(List<Letter> word) {
-        String direction = "";
-        char column = ' ';
-		boolean tf = true;
+        String directionString;
+        Direction direction;
+        boolean tf = true;
+        char frontx;
+        int fronty;
         int x = 0;
         int y = 0;
-        
-        
+
         do {
-            System.out.println("Dans quelle direction voulez-vous placer votre mot ? (" + Direction.HORIZONTAL.getCommand() + "/" + Direction.VERTICAL.getCommand() + ")");
-            direction = scanner.next().toUpperCase();
-            if ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) )
+            System.out.println("Dans quelle direction voulez-vous placer votre mot ? ("
+                    + Direction.HORIZONTAL.getCommand() + "/" + Direction.VERTICAL.getCommand() + ")");
+            directionString = scanner.next().toUpperCase();
+            if ((!directionString.equals(Direction.HORIZONTAL.getCommand()))
+                    && (!directionString.equals(Direction.VERTICAL.getCommand())))
                 System.err.println("Commande inconnu.");
-        } while ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) );
-        
+        } while ((!directionString.equals(Direction.HORIZONTAL.getCommand()))
+                && (!directionString.equals(Direction.VERTICAL.getCommand())));
+
+        if (directionString.equals(Direction.HORIZONTAL.getCommand()))
+            direction = Direction.HORIZONTAL;
+        else
+            direction = Direction.VERTICAL;
+
         while (tf) {
-			if (wordCount == 0) {
-            	tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > board.getSize())) || (!firstWordIsOnStar(word, x, y, direction));
-        	} else {
-				tf = ((column < 'A') || (column > 'O')) || ((y < 1) || (y > board.getSize()));
-			}
             System.out.println("A quelle position voulez-vous placer votre mot ? (x y)");
-            column = scanner.next().charAt(0);
-            column = Character.toUpperCase(column);
-            x = changeASCII(column);
-            y = scanner.nextInt();
-            if (column < 'A' || column > 'O') {
-                System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
-			}
-            else if (y < 1 || y > board.getSize()) {
-                System.out.println("Erreur : y doit être un entier entre 1 et " + Integer.toString(board.getSize())  + ".");
-            } 
-            else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
-            	System.out.println("Erreur : le mot doit passer par la case centrale.");
-            } 
-            else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
-            	System.out.println("Erreur : le mot doit être connecté aux autres.");
+            frontx = scanner.next().charAt(0);
+            frontx = Character.toUpperCase(frontx);
+            fronty = scanner.nextInt();
+            x = Utility.frontToBackCoord(frontx, fronty).getKey();
+            y = Utility.frontToBackCoord(frontx, fronty).getValue();
+
+            if (wordCount == 0) {
+                tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize()))
+                        || (!firstWordIsOnStar(word, x, y, direction));
+            } else {
+                tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize())
+                        || !(playedWordIsConnectedToTheRest(word, x, y, direction)));
             }
-            else
+
+            if (frontx < 'A' || frontx > 'O') {
+                System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
+            } else if (fronty < 1 || fronty > board.getSize()) {
+                System.out.println(
+                        "Erreur : y doit être un entier entre 1 et " + Integer.toString(board.getSize()) + ".");
+            } else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
+                System.out.println("Erreur : le mot doit passer par la case centrale.");
+            } else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
+                System.out.println("Erreur : le mot doit être connecté aux autres.");
+            } else
                 tf = false;
         }
         placeWord(word, direction, y, x);
@@ -184,62 +194,61 @@ public class Game {
         board.print();
     }
 
-    private void placeWord(List<Letter> word, String direction, int x, int y) {
-        if (direction.equals(Direction.HORIZONTAL.getCommand())) {
+    private void placeWord(List<Letter> word, Direction direction, int x, int y) {
+        if (direction.equals(Direction.HORIZONTAL)) {
             for (int i = 0; i < word.size(); i++) {
-                while(!board.getCase(x - 1, y + i - 1).isEmpty()){
+                while (!board.getTile(x, y + i).isEmpty()) {
                     y++;
                 }
-                board.getCase(x - 1, y + i - 1).setLetter(word.get(i));
+                board.getTile(x, y + i).setLetter(word.get(i));
             }
         } else {
             for (int i = 0; i < word.size(); i++) {
-                while(!board.getCase(x + i - 1, y - 1).isEmpty()){
+                while (!board.getTile(x + i, y).isEmpty()) {
                     x++;
                 }
-                board.getCase(x + i - 1, y - 1).setLetter(word.get(i));
+                board.getTile(x + i, y).setLetter(word.get(i));
             }
         }
     }
-    
-	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, String dir) {
-        if (dir.equals(Direction.HORIZONTAL.getCommand())) {
-            if (x + word.size() < board.getMiddleSize() || x > board.getMiddleSize()) {
+
+    public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
+        if (dir.equals(Direction.HORIZONTAL)) {
+            if (x + word.size() < board.getMiddleSize() - 1 || x > board.getMiddleSize() - 1) {
                 return false;
             }
             for (int i = 0; i < word.size(); i++) {
-                if (x + i == board.getMiddleSize() && y == board.getMiddleSize()) {
+                if (x + i == board.getMiddleSize() - 1 && y == board.getMiddleSize() - 1) {
                     return true;
                 }
             }
         } else {
-            if (y + word.size() < board.getMiddleSize() || y > board.getMiddleSize()) {
+            if (y + word.size() < board.getMiddleSize() - 1 || y > board.getMiddleSize() - 1) {
                 return false;
             }
             for (int i = 0; i < word.size(); i++) {
-                if (y + i == board.getMiddleSize() && x == board.getMiddleSize()) {
+                if (y + i == board.getMiddleSize() - 1 && x == board.getMiddleSize() - 1) {
                     return true;
                 }
             }
         }
         return false;
-	}
-	
-	public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, String dir) {
-		if (dir.equals(Direction.HORIZONTAL.getCommand())){
-			for(int i=x ; i<(word.size()+x) ; i++) {
-				if (!(board.getCase(i-1, y).isEmpty() || board.getCase(i+1, y).isEmpty() || board.getCase(i, y-1).isEmpty() || board.getCase(i, y+1).isEmpty())) {
-					return true;
-				}
-			}
-		} else {
-			for(int i=y ; i<(word.size()+x) ; i++) {
-				if (!(board.getCase(x-1, i).isEmpty() || board.getCase(x+1, i).isEmpty() || board.getCase(x, i-1).isEmpty() || board.getCase(x, i+1).isEmpty())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-}
+    }
 
+    public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
+        if (dir.equals(Direction.HORIZONTAL)) {
+            for (int i = x; i < (word.size() - 1 + x); i++) {
+                if (board.letterNextToCoord(i, y)) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = y; i < (word.size() + x); i++) {
+                if (board.letterNextToCoord(x, i)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}

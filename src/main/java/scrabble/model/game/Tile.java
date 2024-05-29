@@ -2,24 +2,12 @@ package scrabble.model.game;
 
 import scrabble.model.letter.Letter;
 
-public class Case {
-    private int x;
-    private int y;
+public class Tile {
     private Multiplier multiplier;
     private Letter letter;
 
-    public Case(int x, int y, Multiplier multiplier) {
-        this.x = x;
-        this.y = y;
+    public Tile(Multiplier multiplier) {
         this.multiplier = multiplier;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public Multiplier getMultiplier() {
@@ -31,7 +19,7 @@ public class Case {
     }
 
     public Letter getLetter() {
-    	return letter;
+        return letter;
     }
 
     public void setLetter(Letter letter) {
@@ -41,11 +29,11 @@ public class Case {
     public boolean isEmpty() {
         return letter == null;
     }
-    
+
     public String toString() {
-    	if (isEmpty()) 
-    		return this.multiplier.toString();
-    	else 
+        if (isEmpty())
+            return this.multiplier.toString();
+        else
             return " " + this.letter.toString() + " ";
     }
 }

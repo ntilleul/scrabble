@@ -11,16 +11,16 @@ import scrabble.model.game.Multiplier;
 public class BoardTest {
 	
 	@Test
-	public void isEmptyCaseNewBoard() {
+	public void isEmptyTileNewBoard() {
 		Board board = new Board();
-		boolean isEmpty = board.getCase(1,1).isEmpty();
+		boolean isEmpty = board.getTile(1,1).isEmpty();
         assertTrue(isEmpty);
 	}
 
 	@Test
 	public void isCaseMultiplierEquals1(){
 		Board board = new Board();
-		Multiplier multiplier = board.getCase(1,1).getMultiplier();
+		Multiplier multiplier = board.getTile(1,1).getMultiplier();
 		assertEquals(Multiplier.WORD_2, multiplier);
 	}
 

@@ -6,6 +6,8 @@ import scrabble.model.letter.Letter;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.util.Pair;
+
 public class Utility {
     public boolean verifyNumber(int number, Game game){
         return number > 0 && number <= game.getPlayer().getDeck().size();
@@ -25,6 +27,10 @@ public class Utility {
 
     public static int changeASCII(char letter) {
         letter = Character.toLowerCase(letter);
-        return letter - 'a' + 1;
+        return letter - 'a';
+    }
+
+    public static Pair<Integer, Integer> frontToBackCoord (char x, int y) {
+        return new Pair<Integer,Integer>(changeASCII(x), y-1);
     }
 }

@@ -41,7 +41,7 @@ public class Bag {
         List<Letter> sevenLetters = new ArrayList<>();
         int count = 0;
         int i = 0;
-        while ((i<letters.size()) && count < 7) {
+        while ((i < letters.size()) && count < 7) {
             Letter letter = letters.get(i);
             if (letter.getNumber() > 0) {
                 sevenLetters.add(letter);
@@ -55,11 +55,11 @@ public class Bag {
         return sevenLetters;
     }
 
-    public List<Letter> getNLetters(int n ){
+    public List<Letter> getNLetters(int n) {
         List<Letter> nLetters = new ArrayList<>();
         int count = 0;
         int i = 0;
-        while ((i<letters.size()) && count < n) {
+        while ((i < letters.size()) && count < n) {
             Letter letter = letters.get(i);
             if (letter.getNumber() > 0) {
                 nLetters.add(letter);

@@ -224,5 +224,22 @@ public class Game {
         }
         return false;
 	}
+	
+	public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, String dir) {
+		if (dir.equals(Direction.HORIZONTAL.getCommand())){
+			for(int i=x ; i<(word.size()+x) ; i++) {
+				if (!(board.getCase(i-1, y).isEmpty() || board.getCase(i+1, y).isEmpty() || board.getCase(i, y-1).isEmpty() || board.getCase(i, y+1).isEmpty())) {
+					return true;
+				}
+			}
+		} else {
+			for(int i=y ; i<(word.size()+x) ; i++) {
+				if (!(board.getCase(x-1, i).isEmpty() || board.getCase(x+1, i).isEmpty() || board.getCase(x, i-1).isEmpty() || board.getCase(x, i+1).isEmpty())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 

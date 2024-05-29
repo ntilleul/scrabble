@@ -166,8 +166,8 @@ public class Game {
             frontx = scanner.next().charAt(0);
             frontx = Character.toUpperCase(frontx);
             fronty = scanner.nextInt();
-            x = Utility.frontToBackCoord(frontx, fronty).getKey();
-            y = Utility.frontToBackCoord(frontx, fronty).getValue();
+            x = Utility.frontToBackCoord(frontx, fronty)[0];
+            y = Utility.frontToBackCoord(frontx, fronty)[1];
 
             if (wordCount == 0) {
                 tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize()))

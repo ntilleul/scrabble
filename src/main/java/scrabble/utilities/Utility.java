@@ -6,22 +6,19 @@ import scrabble.model.letter.Letter;
 import java.util.Arrays;
 import java.util.List;
 
-import javafx.util.Pair;
-
 public class Utility {
-    public boolean verifyNumber(int number, Game game){
+    public boolean verifyNumber(int number, Game game) {
         return number > 0 && number <= game.getPlayer().getDeck().size();
     }
 
-    public static boolean verifyLetter(char letter){
+    public static boolean verifyLetter(char letter) {
         List<Character> alphabet = Arrays.asList(
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '?'
-        );
+                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '?');
         return alphabet.contains(letter);
     }
 
-    public boolean verifyContainsLetterInDeck(Letter letter, List<Letter> deck){
+    public boolean verifyContainsLetterInDeck(Letter letter, List<Letter> deck) {
         return deck.contains(letter);
     }
 
@@ -30,7 +27,10 @@ public class Utility {
         return letter - 'a';
     }
 
-    public static Pair<Integer, Integer> frontToBackCoord (char x, int y) {
-        return new Pair<Integer,Integer>(changeASCII(x), y-1);
+    public static int[] frontToBackCoord(char x, int y) {
+        int[] coord = new int[2];
+        coord[0] = changeASCII(x);
+        coord[1] = y - 1;
+        return coord;
     }
 }

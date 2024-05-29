@@ -149,9 +149,6 @@ public class Game {
         do {
             System.out.println("Dans quelle direction voulez-vous placer votre mot ? (" + Direction.HORIZONTAL.getCommand() + "/" + Direction.VERTICAL.getCommand() + ")");
             direction = scanner.next().toUpperCase();
-            System.out.println(direction);
-            System.out.println(Direction.HORIZONTAL.getCommand());
-            System.out.println((direction.equals(Direction.HORIZONTAL.getCommand())));;
             if ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) )
                 System.err.println("Commande inconnu.");
         } while ( (!direction.equals(Direction.HORIZONTAL.getCommand())) && (!direction.equals(Direction.VERTICAL.getCommand())) );
@@ -175,6 +172,9 @@ public class Game {
             } 
             else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
             	System.out.println("Erreur : le mot doit passer par la case centrale.");
+            } 
+            else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
+            	System.out.println("Erreur : le mot doit être connecté aux autres.");
             }
             else
                 tf = false;

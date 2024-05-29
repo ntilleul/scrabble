@@ -1,5 +1,9 @@
 package scrabble.model.game;
 
+import java.util.List;
+
+import scrabble.model.letter.Letter;
+
 public class Board {
 
 	public Tile[][] board;
@@ -128,8 +132,49 @@ public class Board {
 		return boardSize / 2 + 1;
 	}
 
+	public void placeLetter(Letter letter, int x, int y) {
+		getTile(x, y).setLetter(letter);
+	}
+
+	public void placeWord(List<Letter> word, Direction direction, int x, int y) {
+		for (int i = 0; i < word.size(); i++) {
+			if (direction == Direction.HORIZONTAL)
+				placeLetter(word.get(i), x, y + i);
+			else
+				placeLetter(word.get(i), x + i, y);
+		}
+	}
+
 	public boolean letterNextToCoord(int x, int y) {
-		return !(getTile(x - 1, y).isEmpty() && getTile(x, y - 1).isEmpty() && getTile(x + 1, y).isEmpty()
-				&& getTile(x, y + 1).isEmpty());
+		Boolean letterUp;
+		Boolean letterDown;
+		Boolean letterRight;
+		Boolean letterLeft;
+
+		try {
+			letterUp = !getTile(x, y - 1).isEmpty();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			letterUp = false;
+		}
+
+		try {
+			letterDown = !getTile(x, y + 1).isEmpty();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			letterDown = false;
+		}
+
+		try {
+			letterRight = !getTile(x + 1, y).isEmpty();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			letterRight = false;
+		}
+
+		try {
+			letterLeft = !getTile(x - 1, y).isEmpty();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			letterLeft = false;
+		}
+
+		return (letterDown || letterUp || letterLeft || letterRight);
 	}
 }

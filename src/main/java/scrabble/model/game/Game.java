@@ -189,28 +189,29 @@ public class Game {
             } else
                 tf = false;
         }
-        placeWord(word, direction, y, x);
+        board.placeWord(word, direction, y, x);
         wordCount++;
         board.print();
     }
 
-    private void placeWord(List<Letter> word, Direction direction, int x, int y) {
-        if (direction.equals(Direction.HORIZONTAL)) {
-            for (int i = 0; i < word.size(); i++) {
-                while (!board.getTile(x, y + i).isEmpty()) {
-                    y++;
-                }
-                board.getTile(x, y + i).setLetter(word.get(i));
-            }
-        } else {
-            for (int i = 0; i < word.size(); i++) {
-                while (!board.getTile(x + i, y).isEmpty()) {
-                    x++;
-                }
-                board.getTile(x + i, y).setLetter(word.get(i));
-            }
-        }
-    }
+    // private void placeWord(List<Letter> word, Direction direction, int x, int y)
+    // {
+    // if (direction.equals(Direction.HORIZONTAL)) {
+    // for (int i = 0; i < word.size(); i++) {
+    // while (!board.getTile(x, y + i).isEmpty()) {
+    // y++;
+    // }
+    // board.getTile(x, y + i).setLetter(word.get(i));
+    // }
+    // } else {
+    // for (int i = 0; i < word.size(); i++) {
+    // while (!board.getTile(x + i, y).isEmpty()) {
+    // x++;
+    // }
+    // board.getTile(x + i, y).setLetter(word.get(i));
+    // }
+    // }
+    // }
 
     public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
         if (dir.equals(Direction.HORIZONTAL)) {
@@ -238,15 +239,13 @@ public class Game {
     public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
         if (dir.equals(Direction.HORIZONTAL)) {
             for (int i = x; i < (word.size() - 1 + x); i++) {
-                if (board.letterNextToCoord(i, y)) {
+                if (board.letterNextToCoord(i, y))
                     return true;
-                }
             }
         } else {
             for (int i = y; i < (word.size() + x); i++) {
-                if (board.letterNextToCoord(x, i)) {
+                if (board.letterNextToCoord(x, i))
                     return true;
-                }
             }
         }
         return false;

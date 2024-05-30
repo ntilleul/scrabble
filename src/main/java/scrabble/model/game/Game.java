@@ -112,6 +112,12 @@ public class Game {
                 player.addPoint(letter.getPoints());
                 player.getDeck().getLetters().remove(letter);
             }
+
+            if (player.getDeck().size() == 0) {
+                wordPoints += 50;
+                player.addPoint(50);
+            }
+
             char tempC;
             String tempS = "";
             for (int i = 0; i < stringInput.length(); i++) {
@@ -126,6 +132,7 @@ public class Game {
             player.draw(bag.getNLetters(wordSize));
             System.out.println("Vous avez jouer ce mot: " + stringInput);
             printWord(createdWord);
+
             System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de "
                     + player.getPoint() + " points.");
         } else {

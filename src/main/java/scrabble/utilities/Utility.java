@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Utility {
     public boolean verifyNumber(int number, Game game) {
-        return number > 0 && number <= game.getPlayer().getDeck().size();
+        return number > 0 && number <= game.getPlayer().getDeckSize();
     }
 
     public static boolean verifyLetter(char letter) {

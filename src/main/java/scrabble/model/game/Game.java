@@ -29,14 +29,14 @@ public class Game {
 
     public void refillPlayerDeck() {
         // TODO modify for multiplayer in future
-        int numPlayerLetters = player.getDeck().size();
-        for (Letter letter : player.getDeck().getLetters()) {
+        int numPlayerLetters = player.getDeckSize();
+        for (Letter letter : player.getLetters()) {
             bag.addLetters(letter);
             letter.incrementNumber();
         }
         bag.shuffleLetters();
 
-        while (!player.getDeck().getLetters().isEmpty()) {
+        while (!player.isDeckEmpty()) {
             player.getRid(0);
         }
 
@@ -45,7 +45,7 @@ public class Game {
 
     public void printPlayerdeck() {
         System.out.println("\nAffichage de votre banc:");
-        player.getDeck().getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
+        player.getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
         System.out.println();
     }
 
@@ -58,7 +58,7 @@ public class Game {
     }
 
     public boolean verifWord(String word) {
-        List<Letter> deck = new ArrayList<>(player.getDeck().getLetters());
+        List<Letter> deck = new ArrayList<>(player.getLetters());
 
         List<Letter> availableLetters = new ArrayList<>(deck);
 
@@ -110,10 +110,10 @@ public class Game {
             for (Letter letter : createdWord) {
                 wordPoints = wordPoints + letter.getPoints();
                 player.addPoint(letter.getPoints());
-                player.getDeck().getLetters().remove(letter);
+                player.getLetters().remove(letter);
             }
 
-            if (player.getDeck().size() == 0) {
+            if (player.getDeckSize() == 0) {
                 wordPoints += 50;
                 player.addPoint(50);
             }
@@ -141,7 +141,7 @@ public class Game {
     }
 
     public boolean verifWin(Game game) {
-        return game.getBag().getLetters().isEmpty() && game.getPlayer().getDeck().isEmpty();
+        return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();
     }
 
     public void printWord(List<Letter> word) {
@@ -200,25 +200,6 @@ public class Game {
         wordCount++;
         board.print();
     }
-
-    // private void placeWord(List<Letter> word, Direction direction, int x, int y)
-    // {
-    // if (direction.equals(Direction.HORIZONTAL)) {
-    // for (int i = 0; i < word.size(); i++) {
-    // while (!board.getTile(x, y + i).isEmpty()) {
-    // y++;
-    // }
-    // board.getTile(x, y + i).setLetter(word.get(i));
-    // }
-    // } else {
-    // for (int i = 0; i < word.size(); i++) {
-    // while (!board.getTile(x + i, y).isEmpty()) {
-    // x++;
-    // }
-    // board.getTile(x + i, y).setLetter(word.get(i));
-    // }
-    // }
-    // }
 
     public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
         if (dir.equals(Direction.HORIZONTAL)) {

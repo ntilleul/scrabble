@@ -11,24 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerTest {
-	
-	 @Test
-	    public void haveSevenLetters() {
-	    	Bag testBag = new Bag();
-	    	List<Letter> sevenLetters = new ArrayList<>();
-	    	sevenLetters = testBag.getSevenLetters();
-	    	assertEquals(7, sevenLetters.size());
-	    }
-	    
-	    @Test
-	    public void refillDeck() {
-	    	Game testGame = new Game();
-	    	Deck oldDeck = new Deck(testGame.getBag().getSevenLetters());
-	    	oldDeck.getLetters().clear();
-	    	for(Letter letter : testGame.getPlayer().getDeck().getLetters()) {
-	    		oldDeck.addLetter(letter);
-	    	}
-	    	testGame.refillPlayerDeck();
-	    	assertNotEquals(oldDeck, testGame.getPlayer().getDeck());
-	    }
+
+	@Test
+	public void haveSevenLetters() {
+		Bag testBag = new Bag();
+		List<Letter> sevenLetters = new ArrayList<>();
+		sevenLetters = testBag.getSevenLetters();
+		assertEquals(7, sevenLetters.size());
+	}
+
+	@Test
+	public void refillDeck() {
+		Game testGame = new Game();
+		Deck oldDeck = new Deck(testGame.getBag().getSevenLetters());
+		oldDeck.getLetters().clear();
+		for (Letter letter : testGame.getPlayer().getLetters()) {
+			oldDeck.addLetter(letter);
+		}
+		testGame.refillPlayerDeck();
+		assertNotEquals(oldDeck, testGame.getPlayer().getDeck());
+	}
 }

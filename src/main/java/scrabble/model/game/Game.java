@@ -103,21 +103,7 @@ public class Game {
     public void playWord(String stringInput) {
         System.out.println("Voulez vous jouer ce mot ? (O/N)");
         String choice = scanner.next().toUpperCase();
-        int wordSize = stringInput.length();
-        int wordPoints = 0;
         if (choice.equals("O")) {
-            List<Letter> createdWord = createWord(stringInput);
-            for (Letter letter : createdWord) {
-                wordPoints = wordPoints + letter.getPoints();
-                player.addPoint(letter.getPoints());
-                player.getLetters().remove(letter);
-            }
-
-            if (player.getDeckSize() == 0) {
-                wordPoints += 50;
-                player.addPoint(50);
-            }
-
             char tempC;
             String tempS = "";
             for (int i = 0; i < stringInput.length(); i++) {
@@ -129,12 +115,12 @@ public class Game {
                 }
             }
             stringInput = tempS;
-            player.draw(bag.getNLetters(wordSize));
+
+            List<Letter> createdWord = createWord(stringInput);
+
             System.out.println("Vous avez jouer ce mot: " + stringInput);
             printWord(createdWord);
 
-            System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de "
-                    + player.getPoint() + " points.");
         } else {
             System.out.println("Vous avez annulé votre mot.");
         }
@@ -199,6 +185,21 @@ public class Game {
         board.placeWord(word, direction, y, x);
         wordCount++;
         board.print();
+
+        int points = countPointsWord(x, y, word, direction);
+        for (Letter letter : word) {
+            player.getLetters().remove(letter);
+        }
+        player.draw(bag.getNLetters(word.size()));
+
+        if (player.getDeckSize() == 0) {
+            points += 50;
+        }
+
+        player.addPoint(points);
+
+        System.out.println("Vous avez gagné " + points + " points ce qui vous amène à un total de "
+                + player.getPoint() + " points.");
     }
 
     public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
@@ -225,17 +226,37 @@ public class Game {
     }
 
     public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
+
         if (dir.equals(Direction.HORIZONTAL)) {
-            for (int i = x; i < (word.size() - 1 + x); i++) {
+            for (int i = x; i < (word.size() + x); i++) {
                 if (board.letterNextToCoord(i, y))
                     return true;
             }
         } else {
-            for (int i = y; i < (word.size() + x); i++) {
+            for (int i = y; i < (word.size() + y); i++) {
                 if (board.letterNextToCoord(x, i))
                     return true;
             }
         }
         return false;
+    }
+
+    public int countPointsWord(int x, int y, List<Letter> word, Direction dir) {
+        int total = 0;
+        int wordMultiplier = 1;
+        if (dir.equals(Direction.HORIZONTAL)) {
+            for (int i = x; i < word.size(); i++) {
+                total += board.getTile(y, i).getPoint();
+                wordMultiplier += board.getTile(y, i).getMultiplierValue();
+                board.getTile(y, i).setMultiplier(Multiplier.DEFAULT);
+            }
+        } else {
+            for (int i = y; i < word.size(); i++) {
+                total += board.getTile(i, x).getPoint();
+                wordMultiplier += board.getTile(i, x).getMultiplierValue();
+                board.getTile(i, x).setMultiplier(Multiplier.DEFAULT);
+            }
+        }
+        return total * wordMultiplier;
     }
 }

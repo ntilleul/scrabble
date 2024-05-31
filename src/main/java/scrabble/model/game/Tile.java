@@ -36,4 +36,15 @@ public class Tile {
         else
             return " " + this.letter.toString() + " ";
     }
+
+    public int getPoint() {
+        int initPoint = 0;
+        if (!isEmpty())
+            initPoint = getLetter().getPoints();
+        return initPoint * multiplier.getValue();
+    }
+
+    public int getMultiplierValue() {
+        return multiplier.getValue();
+    }
 }

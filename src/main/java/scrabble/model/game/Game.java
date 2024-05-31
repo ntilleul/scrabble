@@ -1,12 +1,12 @@
 package scrabble.model.game;
 
-import scrabble.model.letter.Letter;
-import scrabble.model.player.Player;
-import scrabble.utilities.Utility;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import scrabble.model.letter.Letter;
+import scrabble.model.player.Player;
+import scrabble.utilities.Utility;
 
 public class Game {
 
@@ -226,17 +226,21 @@ public class Game {
     }
 
     public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
-
+		int i;
         if (dir.equals(Direction.HORIZONTAL)) {
-            for (int i = x; i < (word.size() + x); i++) {
-                if (board.letterNextToCoord(i, y))
+			i = x;
+			do {
+				if (board.letterNextToCoord(y, i))
                     return true;
-            }
+				i++;
+			} while (i < (word.size() + x));
         } else {
-            for (int i = y; i < (word.size() + y); i++) {
-                if (board.letterNextToCoord(x, i))
+			i = y;
+			do {
+				if (board.letterNextToCoord(i, x))
                     return true;
-            }
+				i++;
+			} while (i < (word.size() + y));
         }
         return false;
     }

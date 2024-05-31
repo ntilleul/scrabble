@@ -104,10 +104,17 @@ public class Board {
 
 	public void placeWord(List<Letter> word, Direction direction, int x, int y) {
 		for (int i = 0; i < word.size(); i++) {
-			if (direction == Direction.HORIZONTAL)
+			if (direction == Direction.HORIZONTAL) {
+				while (!getTile(x, y + i).isEmpty()) {
+					y++;
+				}
 				placeLetter(word.get(i), x, y + i);
-			else
+			} else {
+				while (!getTile(x + i, y).isEmpty()) {
+					x++;
+				}
 				placeLetter(word.get(i), x + i, y);
+			}
 		}
 	}
 

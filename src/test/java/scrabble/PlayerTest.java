@@ -13,13 +13,6 @@ import java.util.List;
 public class PlayerTest {
 
 	@Test
-	public void haveSevenLetters() {
-		Game testGame = new Game();
-		List<Letter> sevenLetters = testGame.getBag().getSevenLetters();
-		assertEquals(7, sevenLetters.size());
-	}
-
-	@Test
 	public void refillDeck() {
 		Game testGame = new Game();
 		Deck oldDeck = new Deck(testGame.getBag().getSevenLetters());
@@ -29,5 +22,13 @@ public class PlayerTest {
 		}
 		testGame.refillPlayerDeck();
 		assertNotEquals(oldDeck, testGame.getPlayer().getDeck());
+	}
+
+	@Test
+	public void refillDeckSize() {
+		Game testGame = new Game();
+		testGame.getPlayer().getLetters().clear();
+		testGame.refillPlayerDeck();
+		assertEquals(7, testGame.getPlayer().getDeck().size());
 	}
 }

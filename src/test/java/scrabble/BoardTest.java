@@ -3,8 +3,12 @@ package scrabble;
 import org.junit.Test;
 
 import scrabble.model.game.Board;
+import scrabble.model.game.Direction;
 import scrabble.model.game.Multiplier;
 import scrabble.model.letter.Letter;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -49,4 +53,42 @@ public class BoardTest {
         assertFalse(board.letterNextToCoord(10, 12));
 	}
 
+	@Test
+	public void boardShouldPlaceLetterCorrectly() {
+		Board board = new Board();
+		board.placeLetter(Letter.A, 1, 1);
+		assertEquals(Letter.A, board.getTile(1, 1).getLetter());
+	}
+
+	@Test
+	public void boardShouldPlaceWordCorrectlyInHorizontalDirection() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.H, Letter.E, Letter.L, Letter.L, Letter.O);
+		board.placeWord(word, Direction.HORIZONTAL, 7, 7);
+		for (int i = 0; i < word.size(); i++) {
+			assertEquals(word.get(i), board.getTile(7, 7 + i).getLetter());
+		}
+	}
+
+	@Test
+	public void boardShouldPlaceWordCorrectlyInVerticalDirection() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.H, Letter.E, Letter.L, Letter.L, Letter.O);
+		board.placeWord(word, Direction.VERTICAL, 7, 7);
+		for (int i = 0; i < word.size(); i++) {
+			assertEquals(word.get(i), board.getTile(7 + i, 7).getLetter());
+		}
+	}
+
+	@Test
+	public void boardShouldInitializeWithCorrectSize() {
+		Board board = new Board();
+		assertEquals(15, board.getSize());
+	}
+
+	@Test
+	public void boardShouldInitializeWithCorrectMiddleSize() {
+		Board board = new Board();
+		assertEquals(8, board.getMiddleSize());
+	}
 }

@@ -226,21 +226,21 @@ public class Game {
     }
 
     public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
-		int i;
+        int i;
         if (dir.equals(Direction.HORIZONTAL)) {
-			i = x;
-			do {
-				if (board.letterNextToCoord(y, i))
+            i = x;
+            do {
+                if (board.letterNextToCoord(y, i))
                     return true;
-				i++;
-			} while (i < (word.size() + x));
+                i++;
+            } while (i < (word.size() + x));
         } else {
-			i = y;
-			do {
-				if (board.letterNextToCoord(i, x))
+            i = y;
+            do {
+                if (board.letterNextToCoord(i, x))
                     return true;
-				i++;
-			} while (i < (word.size() + y));
+                i++;
+            } while (i < (word.size() + y));
         }
         return false;
     }
@@ -249,15 +249,28 @@ public class Game {
         int total = 0;
         int wordMultiplier = 1;
         if (dir.equals(Direction.HORIZONTAL)) {
-            for (int i = x; i < word.size(); i++) {
+            for (int i = x; i < word.size() + x; i++) {
+
                 total += board.getTile(y, i).getPoint();
-                wordMultiplier += board.getTile(y, i).getMultiplierValue();
+                Multiplier multiplayer = board.getTile(y, i).getMultiplier();
+
+                if (multiplayer.equals(Multiplier.WORD_2) || multiplayer.equals(Multiplier.WORD_3)
+                        || multiplayer.equals(Multiplier.STAR))
+                    wordMultiplier += multiplayer.getValue();
+
                 board.getTile(y, i).setMultiplier(Multiplier.DEFAULT);
+
             }
         } else {
-            for (int i = y; i < word.size(); i++) {
+            for (int i = y; i < word.size() + x; i++) {
+
                 total += board.getTile(i, x).getPoint();
-                wordMultiplier += board.getTile(i, x).getMultiplierValue();
+                Multiplier multiplayer = board.getTile(i, x).getMultiplier();
+
+                if (multiplayer.equals(Multiplier.WORD_2) || multiplayer.equals(Multiplier.WORD_3)
+                        || multiplayer.equals(Multiplier.STAR))
+                    wordMultiplier += multiplayer.getValue();
+
                 board.getTile(i, x).setMultiplier(Multiplier.DEFAULT);
             }
         }

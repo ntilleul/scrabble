@@ -27,7 +27,6 @@ public class PlayerTest {
 	@Test
 	public void refillDeckSize() {
 		Game testGame = new Game();
-		testGame.getPlayer().getLetters().clear();
 		testGame.refillPlayerDeck();
 		assertEquals(7, testGame.getPlayer().getDeck().size());
 	}

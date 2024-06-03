@@ -1,7 +1,7 @@
 package scrabble.model.game;
 
 public enum Multiplier {
-    DEFAULT("   ", 1), LETTER_2("L2 ", 2), LETTER_3("L3 ", 3), WORD_2("M2 ", 2), WORD_3("M3 ", 3), STAR(" * ", 1);
+    DEFAULT("   ", 1), LETTER_2("L2 ", 2), LETTER_3("L3 ", 3), WORD_2("M2 ", 2), WORD_3("M3 ", 3), STAR(" * ", 2);
 
     private final String string;
     private final int value;

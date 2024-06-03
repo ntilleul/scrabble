@@ -41,7 +41,9 @@ public class Tile {
         int initPoint = 0;
         if (!isEmpty())
             initPoint = getLetter().getPoints();
-        return initPoint * multiplier.getValue();
+        if (multiplier.equals(Multiplier.LETTER_2) || multiplier.equals(Multiplier.LETTER_3))
+            initPoint *= multiplier.getValue();
+        return initPoint;
     }
 
     public int getMultiplierValue() {

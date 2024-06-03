@@ -1,13 +1,12 @@
 package scrabble;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import scrabble.model.game.Board;
 import scrabble.model.game.Multiplier;
 import scrabble.model.letter.Letter;
+
+import static org.junit.Assert.*;
 
 public class BoardTest {
 
@@ -41,13 +40,13 @@ public class BoardTest {
 		board.getTile(11, 11).setLetter(Letter.C);
 		board.getTile(10, 12).setLetter(Letter.C);
 
-		assertTrue(!board.letterNextToCoord(1, 1));
-		assertTrue(!board.letterNextToCoord(0, 0));
+        assertFalse(board.letterNextToCoord(1, 1));
+        assertFalse(board.letterNextToCoord(0, 0));
 		assertTrue(board.letterNextToCoord(5, 5));
 		assertTrue(board.letterNextToCoord(8, 3));
-		assertTrue(!board.letterNextToCoord(10, 10));
-		assertTrue(!board.letterNextToCoord(11, 11));
-		assertTrue(!board.letterNextToCoord(10, 12));
+        assertFalse(board.letterNextToCoord(10, 10));
+        assertFalse(board.letterNextToCoord(11, 11));
+        assertFalse(board.letterNextToCoord(10, 12));
 	}
 
 }

@@ -14,9 +14,8 @@ public class PlayerTest {
 
 	@Test
 	public void haveSevenLetters() {
-		Bag testBag = new Bag();
-		List<Letter> sevenLetters = new ArrayList<>();
-		sevenLetters = testBag.getSevenLetters();
+		Game testGame = new Game();
+		List<Letter> sevenLetters = testGame.getBag().getSevenLetters();
 		assertEquals(7, sevenLetters.size());
 	}
 

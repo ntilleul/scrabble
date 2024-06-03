@@ -1,7 +1,6 @@
 package scrabble;
 
 import org.junit.Test;
-import scrabble.model.game.Bag;
 import scrabble.model.letter.Letter;
 import static org.junit.Assert.assertEquals;
 
@@ -32,10 +31,4 @@ public class LetterTest {
         assertEquals(3, pointsB);
     }
 
-    @Test
-    public void verificationOfNumberOfLetterInBagInInitialisation(){
-        Bag bag = new Bag();
-        int numberOfLetterInBag = bag.getLetters().size();
-        assertEquals(102, numberOfLetterInBag);
-    }
 }

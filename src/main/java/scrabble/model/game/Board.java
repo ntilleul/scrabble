@@ -118,6 +118,31 @@ public class Board {
 		}
 	}
 
+	public boolean verifLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y) {
+		for (int i = 0; i < word.size(); i++) {
+			if (direction == Direction.HORIZONTAL) {
+				try{
+					while (!getTile(x, y + i).isEmpty()) {
+						y++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.out.println("The word is out of the board");
+					return true;
+				}
+			} else {
+				try{
+					while (!getTile(x + i, y).isEmpty()) {
+						x++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.out.println("The word is out of the board");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public boolean letterNextToCoord(int x, int y) {
 		Boolean letterUp;
 		Boolean letterDown;

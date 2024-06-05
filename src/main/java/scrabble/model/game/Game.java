@@ -167,7 +167,7 @@ public class Game {
                         || (!firstWordIsOnStar(word, x, y, direction));
             } else {
                 tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize())
-                        || !(playedWordIsConnectedToTheRest(word, x, y, direction)));
+                        || !(playedWordIsConnectedToTheRest(word, x, y, direction))) ;
             }
 
             if (frontx < 'A' || frontx > 'O') {
@@ -179,8 +179,12 @@ public class Game {
                 System.out.println("Erreur : le mot doit passer par la case centrale.");
             } else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
                 System.out.println("Erreur : le mot doit être connecté aux autres.");
-            } else
+            } else if (board.verifLetterIsOutOfBoard(word, direction, y, x)){
+                System.out.println("Erreur : le mot est en dehors du plateau.");
+                tf = true;
+            }else{
                 tf = false;
+            }
         }
         board.placeWord(word, direction, y, x);
         wordCount++;

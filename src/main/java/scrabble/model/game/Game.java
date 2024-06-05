@@ -105,6 +105,19 @@ public class Game {
         String choice = scanner.next().toUpperCase();
         int wordSize = stringInput.length();
         int wordPoints = 0;
+
+        char tempC;
+        String tempS = "";
+        for (int i = 0; i < stringInput.length(); i++) {
+            if (stringInput.charAt(i) == Letter.JOKER.getValue()) {
+                tempC = Letter.changeJokerValue();
+                tempS = tempS + tempC;
+            } else {
+                tempS = tempS + stringInput.charAt(i);
+            }
+        }
+        stringInput = tempS;
+
         if (choice.equals("O")) {
             List<Letter> createdWord = createWord(stringInput);
             for (Letter letter : createdWord) {
@@ -118,17 +131,6 @@ public class Game {
                 player.addPoint(50);
             }
 
-            char tempC;
-            String tempS = "";
-            for (int i = 0; i < stringInput.length(); i++) {
-                if (stringInput.charAt(i) == Letter.JOKER.getValue()) {
-                    tempC = Letter.changeJokerValue();
-                    tempS = tempS + tempC;
-                } else {
-                    tempS = tempS + stringInput.charAt(i);
-                }
-            }
-            stringInput = tempS;
             player.draw(bag.getNLetters(wordSize));
             System.out.println("Vous avez jouer ce mot: " + stringInput);
             printWord(createdWord);
@@ -242,5 +244,9 @@ public class Game {
 			} while (i < (word.size() + y));
         }
         return false;
+    }
+
+    public Board getBoard() {
+         return this.board;
     }
 }

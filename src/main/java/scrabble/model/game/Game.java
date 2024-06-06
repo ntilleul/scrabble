@@ -66,7 +66,9 @@ public class Game {
             char letterChar = word.charAt(i);
             if (!Utility.verifyLetter(letterChar)) {
                 System.out.println("Votre mot contient des caractères invalides.");
-                return true;
+                System.out.println("Saisissez votre mot :");
+                String stringInput = scanner.next().toUpperCase();
+                verifWord(stringInput);
             } else {
                 Letter letter;
                 if (letterChar == Letter.JOKER.getValue()) {
@@ -76,7 +78,9 @@ public class Game {
                 }
                 if (!availableLetters.contains(letter)) {
                     System.out.println("Vous ne possédez pas toutes ces lettres dans votre deck.");
-                    return true;
+                    System.out.println("Saisissez votre mot :");
+                    String stringInput = scanner.next().toUpperCase();
+                    verifWord(stringInput);
                 } else {
                     availableLetters.remove(letter);
                 }

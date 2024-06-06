@@ -69,13 +69,9 @@ public class MainMenu {
                     String stringInput = scanner.next().toUpperCase();
 
                     boolean invalidWord = game.verifWord(stringInput);
-                    while (invalidWord) {
-                        System.out.println("Saisissez un nouveau mot: ");
-                        stringInput = scanner.next().toUpperCase();
-                        invalidWord = game.verifWord(stringInput);
+                    if(!invalidWord){
+                        game.playWord(stringInput);
                     }
-
-                    game.playWord(stringInput);
                     System.out.println();
                     break;
                 case "Q":

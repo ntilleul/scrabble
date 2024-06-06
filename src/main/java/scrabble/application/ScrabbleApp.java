@@ -6,9 +6,9 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -24,11 +24,10 @@ import scrabble.model.game.Board;
 import scrabble.model.game.Game;
 import scrabble.model.game.Tile;
 import scrabble.model.letter.Letter;
-import scrabble.model.player.Deck;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
-import scrabble.utilities.Exceptions.InsufficientLettersException;
 import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.model.game.Direction;
 
 public class ScrabbleApp extends Application {
 
@@ -108,24 +107,26 @@ public class ScrabbleApp extends Application {
             @Override
             public void handle(MouseEvent event) {
                 err.setText("");
-                String word = tf_word.getText().toUpperCase();
+                String wordString = tf_word.getText().toUpperCase();
+                List<Letter> word = game.createWord(wordString);
                 try {
-                    if (game.verifWord(word))
+                    if (game.verifWord(wordString))
                         System.out.println(true);
-                    openPositionSelector(secondaryStage);
+                    openPositionSelector(secondaryStage, game, word);
 
                 } catch (Exception e) {
                     err.setText(e.getMessage());
                 }
             }
         });
+
         HBox btns = new HBox(btn_changeDeck, btn_jouer);
 
         VBox vbox = new VBox(lblPlayer1, deck, tf_word, err, btns);
 
         BorderPane root = new BorderPane();
         root.setTop(lblTop);
-        root.setAlignment(lblTop, Pos.CENTER);
+        BorderPane.setAlignment(lblTop, Pos.CENTER);
         root.setLeft(vbox);
         root.setCenter(gridPane);
         root.setStyle("-fx-padding: 25px;");
@@ -136,12 +137,13 @@ public class ScrabbleApp extends Application {
         secondaryStage.show();
     }
 
-    private void openPositionSelector(Stage primaryStage) {
+    private void openPositionSelector(Stage primaryStage, Game game, List<Letter> word) {
         Stage stage = new Stage();
         Label title = new Label("Choisisez la direction / position");
 
         Label lbl_direction = new Label("direction");
-        TextField tf_direction = new TextField();
+        ComboBox<String> cb_direction = new ComboBox<>();
+        cb_direction.getItems().addAll("HORIZONTAL", "VERTICAL");
         Label err_direction = new Label();
         err_direction.setTextFill(Color.RED);
 
@@ -150,20 +152,30 @@ public class ScrabbleApp extends Application {
         Label err_position = new Label();
         err_position.setTextFill(Color.RED);
 
+        Label err_general = new Label();
+        err_general.setTextFill(Color.RED);
+
         Button btn_accept = new Button("valider");
         btn_accept.setOnMouseClicked(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
                 err_direction.setText("");
                 err_position.setText("");
+                err_general.setText("");
 
-                String direction = tf_direction.getText().toUpperCase();
-                String position = tf_position.getText().toUpperCase();
+                Direction direction = Direction.HORIZONTAL;
+                String position;
+                int xBack = 0;
+                int yBack = 0;
 
-                if (direction.equals(""))
-                    err_direction.setText("direction vide !");
-                else if ((!direction.equals("H")) && (!direction.equals("V")))
-                    err_direction.setText("direction invalide (H/V)");
+                if (cb_direction.getValue() == "HORIZONTAL")
+                    direction = Direction.HORIZONTAL;
+                else if (cb_direction.getValue() == "VERTICAL")
+                    direction = Direction.VERTICAL;
+                else
+                    err_direction.setText("Direction vide !");
+
+                position = tf_position.getText().toUpperCase();
 
                 if (position.equals(""))
                     err_position.setText("position vide !");
@@ -177,8 +189,9 @@ public class ScrabbleApp extends Application {
 
                             try {
                                 int[] coords = Utility.frontToBackCoord(xFront, yFront);
-                                int xBack = coords[0];
-                                int yBack = coords[1];
+                                xBack = coords[0];
+                                yBack = coords[1];
+
                             } catch (InvalidPositionException e) {
                                 err_position.setText(e.getMessage());
                             }
@@ -188,21 +201,27 @@ public class ScrabbleApp extends Application {
 
                     }
                 }
+                if (err_direction.getText().equals("") || err_position.getText().equals("")) {
+                    try {
+                        game.canPlay(word, xBack, yBack, direction);
+                    } catch (Exception e) {
+                        err_general.setText(e.getMessage());
+                    }
+                }
 
             }
         });
 
         GridPane grid = new GridPane();
         grid.add(lbl_direction, 0, 0);
-        grid.add(tf_direction, 0, 1);
+        grid.add(cb_direction, 0, 1);
         grid.add(err_direction, 0, 2);
         grid.add(lbl_position, 1, 0);
         grid.add(tf_position, 1, 1);
         grid.add(err_position, 1, 2);
 
-        VBox root = new VBox(title, grid, btn_accept);
-        Scene scene = new Scene(root, 500,
-                200);
+        VBox root = new VBox(title, grid, err_general, btn_accept);
+        Scene scene = new Scene(root, 500, 200);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
         stage.setScene(scene);
@@ -216,8 +235,8 @@ public class ScrabbleApp extends Application {
 
     private GridPane createBoardGridPane(Board board) {
         GridPane gridPane = new GridPane();
-        for (int i = 0; i < board.getSize(); i++) {
-            for (int j = 0; j < board.getSize(); j++) {
+        for (int i = 0; i < Board.getSize(); i++) {
+            for (int j = 0; j < Board.getSize(); j++) {
                 Tile tile = board.getTile(i, j);
                 Label label = new Label(tile.toString());
                 label.setMinSize(TILE_SIZE, TILE_SIZE);

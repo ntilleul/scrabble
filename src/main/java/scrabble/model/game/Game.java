@@ -199,6 +199,14 @@ public class Game {
         board.print();
     }
 
+    public boolean canPlay(List<Letter> word, int x, int y, Direction direction) throws InvalidPositionException {
+        if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
+            throw new InvalidPositionException("Le premier mot doit passer par le centre.");
+        else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
+            throw new InvalidPositionException("Le mot doit être connecté au autres");
+        return true;
+    }
+
     public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
         if (dir.equals(Direction.HORIZONTAL)) {
             if (x + word.size() < board.getMiddleSize() - 1 || x > board.getMiddleSize() - 1) {

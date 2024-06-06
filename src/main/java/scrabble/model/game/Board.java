@@ -7,7 +7,7 @@ import scrabble.model.letter.Letter;
 public class Board {
 
 	public Tile[][] board;
-	private final int boardSize = 15;
+	private final static int boardSize = 15;
 
 	public Board() {
 		board = new Tile[boardSize][boardSize];
@@ -90,8 +90,8 @@ public class Board {
 		System.out.println("──┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘");
 	}
 
-	public int getSize() {
-		return this.boardSize;
+	public static int getSize() {
+		return boardSize;
 	}
 
 	public int getMiddleSize() {

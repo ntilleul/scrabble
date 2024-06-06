@@ -7,6 +7,9 @@ import java.util.Scanner;
 import scrabble.model.letter.Letter;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
+import scrabble.utilities.Exceptions.InsufficientLettersException;
+import scrabble.utilities.Exceptions.InvalidCharacterInWordException;
+import scrabble.utilities.Exceptions.InvalidPositionException;
 
 public class Game {
 
@@ -16,10 +19,14 @@ public class Game {
     Scanner scanner = new Scanner(System.in);
     private int wordCount = 0;
 
-    public Game() {
+    public Game(String playerName) {
         board = new Board();
         bag = new Bag();
-        player = new Player("Player", bag.getSevenLetters());
+        player = new Player(playerName, bag.getSevenLetters());
+    }
+
+    public Game() {
+        this("player");
     }
 
     public void start() {
@@ -57,18 +64,16 @@ public class Game {
         return this.bag;
     }
 
-    public boolean verifWord(String word) {
+    public boolean verifWord(String word) throws Exception {
         List<Letter> deck = new ArrayList<>(player.getLetters());
 
         List<Letter> availableLetters = new ArrayList<>(deck);
-
+        if (word.equals(""))
+            throw new InvalidCharacterInWordException("Le mot est vide");
         for (int i = 0; i < word.length(); i++) {
             char letterChar = word.charAt(i);
             if (!Utility.verifyLetter(letterChar)) {
-                System.out.println("Votre mot contient des caractères invalides.");
-                System.out.println("Saisissez votre mot :");
-                String stringInput = scanner.next().toUpperCase();
-                verifWord(stringInput);
+                throw new InvalidCharacterInWordException("Votre mot contient des caractères invalides");
             } else {
                 Letter letter;
                 if (letterChar == Letter.JOKER.getValue()) {
@@ -77,10 +82,7 @@ public class Game {
                     letter = Letter.valueOf(Character.toString(letterChar));
                 }
                 if (!availableLetters.contains(letter)) {
-                    System.out.println("Vous ne possédez pas toutes ces lettres dans votre deck.");
-                    System.out.println("Saisissez votre mot :");
-                    String stringInput = scanner.next().toUpperCase();
-                    verifWord(stringInput);
+                    throw new InsufficientLettersException("Vous ne possedez pas les lettres nécéssaire");
                 } else {
                     availableLetters.remove(letter);
                 }
@@ -104,9 +106,7 @@ public class Game {
         return letterList;
     }
 
-    public void playWord(String stringInput) {
-        System.out.println("Voulez vous jouer ce mot ? (O/N)");
-        String choice = scanner.next().toUpperCase();
+    public void playWord(String stringInput) throws InvalidPositionException {
         int wordSize = stringInput.length();
         int wordPoints = 0;
 
@@ -122,35 +122,27 @@ public class Game {
         }
         stringInput = tempS;
 
-        if (choice.equals("O")) {
-            List<Letter> createdWord = createWord(stringInput);
-            for (Letter letter : createdWord) {
-                wordPoints = wordPoints + letter.getPoints();
-                player.addPoint(letter.getPoints());
-                player.getLetters().remove(letter);
-            }
-
-            if (player.getDeckSize() == 0) {
-                wordPoints += 50;
-                player.addPoint(50);
-            }
-
-            player.draw(bag.getNLetters(wordSize));
-            System.out.println("Vous avez jouer ce mot: " + stringInput);
-            printWord(createdWord);
-
-            System.out.println("Vous avez gagné " + wordPoints + " points ce qui vous amène à un total de "
-                    + player.getPoint() + " points.");
-        } else {
-            System.out.println("Vous avez annulé votre mot.");
+        List<Letter> createdWord = createWord(stringInput);
+        for (Letter letter : createdWord) {
+            wordPoints = wordPoints + letter.getPoints();
+            player.addPoint(letter.getPoints());
+            player.getLetters().remove(letter);
         }
+
+        if (player.getDeckSize() == 0) {
+            wordPoints += 50;
+            player.addPoint(50);
+        }
+
+        player.draw(bag.getNLetters(wordSize));
+        printWord(createdWord);
     }
 
     public boolean verifWin(Game game) {
         return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();
     }
 
-    public void printWord(List<Letter> word) {
+    public void printWord(List<Letter> word) throws InvalidPositionException {
         String directionString;
         Direction direction;
         boolean tf = true;
@@ -231,26 +223,26 @@ public class Game {
     }
 
     public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
-		int i;
+        int i;
         if (dir.equals(Direction.HORIZONTAL)) {
-			i = x;
-			do {
-				if (board.letterNextToCoord(y, i))
+            i = x;
+            do {
+                if (board.letterNextToCoord(y, i))
                     return true;
-				i++;
-			} while (i < (word.size() + x));
+                i++;
+            } while (i < (word.size() + x));
         } else {
-			i = y;
-			do {
-				if (board.letterNextToCoord(i, x))
+            i = y;
+            do {
+                if (board.letterNextToCoord(i, x))
                     return true;
-				i++;
-			} while (i < (word.size() + y));
+                i++;
+            } while (i < (word.size() + y));
         }
         return false;
     }
 
     public Board getBoard() {
-         return this.board;
+        return this.board;
     }
 }

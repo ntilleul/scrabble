@@ -1,7 +1,6 @@
 package scrabble.application;
 
 import scrabble.model.game.Game;
-import scrabble.utilities.Exceptions.InsufficientLettersException;
 
 import java.util.Scanner;
 
@@ -13,7 +12,7 @@ public class MainMenu {
         scanner = new Scanner(System.in);
     }
 
-    public void printStartMenu() throws InsufficientLettersException {
+    public void printStartMenu() throws Exception {
         String choice;
 
         do {
@@ -40,7 +39,7 @@ public class MainMenu {
         scanner.close();
     }
 
-    public void printGameMenu() {
+    public void printGameMenu() throws Exception {
         String choice;
         game.printPlayerdeck();
 
@@ -69,7 +68,7 @@ public class MainMenu {
                     String stringInput = scanner.next().toUpperCase();
 
                     boolean invalidWord = game.verifWord(stringInput);
-                    if(!invalidWord){
+                    if (!invalidWord) {
                         game.playWord(stringInput);
                     }
                     System.out.println();
@@ -82,8 +81,8 @@ public class MainMenu {
             }
         } while ((!choice.equals("Q")) && (!game.verifWin(game)));
 
-        //TODO : afficher le message avec le nom du joueur pour la suite
-        if(game.verifWin(game)){
+        // TODO : afficher le message avec le nom du joueur pour la suite
+        if (game.verifWin(game)) {
             System.out.println("Félicitations, vous avez gagné !");
         }
     }

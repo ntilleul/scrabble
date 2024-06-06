@@ -8,7 +8,7 @@ then we dive into JavaFX.
 
 ### Progression
 - [x] V1 : Setting up the game in console mode in single player
-- [ ] V2 : Play a word in console mode in single player and no verification of the validity of the word played (existing or not)
+- [x] V2 : Play a word in console mode in single player and no verification of the validity of the word played (existing or not)
 - [ ] V3 : Play a word in graphics mode in single player
 - [ ] V4 : Complexify rules
 - [ ] V5 : More interactivity

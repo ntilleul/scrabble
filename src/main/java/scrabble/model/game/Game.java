@@ -280,4 +280,8 @@ public class Game {
         }
         return total * wordMultiplier;
     }
+
+    public Board getBoard(){
+        return this.board;
+    }
 }

@@ -1,15 +1,22 @@
 package scrabble.application;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
+import scrabble.model.game.Board;
+import scrabble.model.game.Game;
+import scrabble.model.game.Tile;
+import scrabble.model.player.Player;
 
 
 public class ScrabbleApp extends Application {
@@ -36,14 +43,15 @@ public class ScrabbleApp extends Application {
         messageLabel.setTextFill(Color.RED);
 
         valideButton.setOnAction(event -> {
-            String player1 = tfPlayer1.getText();
-            String player2 = tfPlayer2.getText();
+            String strPlayer1 = tfPlayer1.getText();
+            String strPlayer2 = tfPlayer2.getText();
 
-            if (player1.isEmpty() || player2.isEmpty()) {
+            if (strPlayer1.isEmpty() || strPlayer2.isEmpty()) {
                 messageLabel.setText("Veuillez remplir les champs pour les deux joueurs.");
             } else {
                 messageLabel.setText("");
-                //TODO: afficher le jeu Scrabble
+                primaryStage.close();
+                openSecondaryStage(strPlayer1, strPlayer2);
             }
         });
 
@@ -57,7 +65,49 @@ public class ScrabbleApp extends Application {
         primaryStage.show();
     }
 
-    //todo: methode pour afficher Scrabble
+    private void openSecondaryStage(String strPlayer1, String strPlayer2) {
+        Stage secondaryStage = new Stage();
+
+        Game game = new Game();
+
+        Player player1 = game.getPlayer();
+
+        Label lblPlayer1 = new Label("Score joueur1: " + player1.getPoint());
+        Label lblTop = new Label("SCRABBLE");
+
+        Board board = game.getBoard();
+        GridPane gridPane = createBoardGridPane(board);
+
+        BorderPane root = new BorderPane();
+        root.setTop(lblTop);
+        root.setAlignment(lblTop, Pos.CENTER);
+        root.setLeft(lblPlayer1);
+        root.setCenter(gridPane);
+        root.setStyle("-fx-padding: 25px;");
+
+        Scene scene = new Scene(root, 1000, 800);
+        secondaryStage.setTitle("Scrabble");
+        secondaryStage.setScene(scene);
+        secondaryStage.show();
+    }
+
+    private static final int TILE_SIZE = 40;
+
+    private GridPane createBoardGridPane(Board board) {
+        GridPane gridPane = new GridPane();
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
+                Tile tile = board.getTile(i, j);
+                Label label = new Label(tile.toString());
+                label.setMinSize(TILE_SIZE, TILE_SIZE);
+                label.setMaxSize(TILE_SIZE, TILE_SIZE);
+                label.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-size: 16;");
+
+                gridPane.add(label, j, i);
+            }
+        }
+        return gridPane;
+    }
 
     public static void main(String[] args) {
         launch(args);

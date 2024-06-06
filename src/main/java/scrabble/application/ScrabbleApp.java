@@ -3,15 +3,9 @@ package scrabble.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -20,25 +14,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
-import scrabble.model.game.Board;
-import scrabble.model.game.Game;
-import scrabble.model.game.Tile;
-import scrabble.model.letter.Letter;
-import scrabble.model.player.Deck;
-import scrabble.model.player.Player;
-import scrabble.utilities.Utility;
-import scrabble.utilities.Exceptions.InsufficientLettersException;
-import scrabble.utilities.Exceptions.InvalidPositionException;
 import scrabble.model.game.Board;
 import scrabble.model.game.Game;
 import scrabble.model.game.Tile;
@@ -51,7 +32,7 @@ import scrabble.model.game.Direction;
 public class ScrabbleApp extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage setPlayerStage) {
 
         Label titleLabel = new Label("SCRABBLE");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -68,7 +49,6 @@ public class ScrabbleApp extends Application {
         Button valideButton = new Button("VALIDER");
         Label messageLabel = new Label();
         messageLabel.setTextFill(Color.RED);
-
         valideButton.setOnAction(event -> {
             String strPlayer1 = tfPlayer1.getText();
             String strPlayer2 = tfPlayer2.getText();
@@ -77,8 +57,8 @@ public class ScrabbleApp extends Application {
                 messageLabel.setText("Veuillez remplir les champs pour les deux joueurs.");
             } else {
                 messageLabel.setText("");
-                primaryStage.close();
-                openSecondaryStage(strPlayer1, strPlayer2);
+                setPlayerStage.close();
+                gameStage(strPlayer1, strPlayer2);
             }
         });
 
@@ -87,12 +67,12 @@ public class ScrabbleApp extends Application {
         mainLayout.setStyle("-fx-padding: 25px;");
 
         Scene scene = new Scene(mainLayout, 400, 300);
-        primaryStage.setTitle("Scrabble");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        setPlayerStage.setTitle("Sélection des joueurs");
+        setPlayerStage.setScene(scene);
+        setPlayerStage.show();
     }
 
-    private void openSecondaryStage(String strPlayer1, String strPlayer2) {
+    private void gameStage(String strPlayer1, String strPlayer2) {
         Stage secondaryStage = new Stage();
 
         Game game = new Game(strPlayer1);
@@ -131,14 +111,24 @@ public class ScrabbleApp extends Application {
                 try {
                     if (game.verifWord(wordString))
                         System.out.println(true);
-                    openPositionSelector(secondaryStage, game, word);
-
+                    List<Object> pos = openPositionSelector(secondaryStage, game, word);
+                    Direction direction = (Direction) pos.get(0);
+                    int xBack = (int) pos.get(1);
+                    int yBack = (int) pos.get(2);
+                    board.placeWord(word, direction, yBack, xBack);
+                    refreshBoardDisplay(board, gridPane);
+                    game.incrementWordCount();
+                    //TODO: add points to player
+                    //TODO: refresh player deck
+                    //TODO: refresh player score
+                    if (game.verifWin(game)) {
+                        endGameStage();
+                    }
                 } catch (Exception e) {
                     err.setText(e.getMessage());
                 }
             }
         });
-
         HBox btns = new HBox(btn_changeDeck, btn_jouer);
 
         VBox vbox = new VBox(lblPlayer1, deck, tf_word, err, btns);
@@ -156,7 +146,9 @@ public class ScrabbleApp extends Application {
         secondaryStage.show();
     }
 
-    private void openPositionSelector(Stage primaryStage, Game game, List<Letter> word) {
+    private List<Object> openPositionSelector(Stage primaryStage, Game game, List<Letter> word) {
+        List<Object> pos = new ArrayList<Object>();
+
         Stage stage = new Stage();
         Label title = new Label("Choisisez la direction / position");
 
@@ -223,11 +215,14 @@ public class ScrabbleApp extends Application {
                 if (err_direction.getText().equals("") || err_position.getText().equals("")) {
                     try {
                         game.canPlay(word, xBack, yBack, direction);
+                        pos.add(direction);
+                        pos.add(xBack);
+                        pos.add(yBack);
+                        stage.close();
                     } catch (Exception e) {
                         err_general.setText(e.getMessage());
                     }
                 }
-
             }
         });
 
@@ -248,10 +243,12 @@ public class ScrabbleApp extends Application {
         stage.setTitle("choix de position");
         stage.setAlwaysOnTop(true);
         stage.showAndWait();
+        return pos;
     }
 
     private static final int TILE_SIZE = 40;
 
+    //TODO: possiblement refaire la création du board
     private GridPane createBoardGridPane(Board board) {
         GridPane gridPane = new GridPane();
         for (int i = 0; i < Board.getSize(); i++) {
@@ -261,8 +258,7 @@ public class ScrabbleApp extends Application {
                 label.setMinSize(TILE_SIZE, TILE_SIZE);
                 label.setMaxSize(TILE_SIZE, TILE_SIZE);
                 label.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-size: 16;");
-
-                gridPane.add(label, j, i);
+                gridPane.add(label, j + 1, i + 1);
             }
         }
         return gridPane;
@@ -274,6 +270,36 @@ public class ScrabbleApp extends Application {
             deck.add(new Label(Character.toString(letter.getValue())));
         }
         return deck;
+    }
+
+    private void refreshBoardDisplay(Board board, GridPane gridPane) {
+        for (int i = 0; i < Board.getSize(); i++) {
+            for (int j = 0; j < Board.getSize(); j++) {
+                Tile tile = board.getTile(i, j);
+                Label label = (Label) gridPane.getChildren().get(i * Board.getSize() + j);
+                label.setText(tile.toString());
+            }
+        }
+    }
+
+
+    public void endGameStage(){
+        Stage endGameStage = new Stage();
+        Label lblEndGame = new Label("Fin de la partie");
+        Button btnEndGame = new Button("Quitter");
+        btnEndGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                endGameStage.close();
+            }
+        });
+        VBox endGameLayout = new VBox(20, lblEndGame, btnEndGame);
+        endGameLayout.setAlignment(Pos.CENTER);
+        endGameLayout.setStyle("-fx-padding: 25px;");
+        Scene scene = new Scene(endGameLayout, 400, 300);
+        endGameStage.setTitle("Fin de la partie");
+        endGameStage.setScene(scene);
+        endGameStage.show();
     }
 
     public static void main(String[] args) {

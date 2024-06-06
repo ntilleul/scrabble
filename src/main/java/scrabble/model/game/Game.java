@@ -17,7 +17,7 @@ public class Game {
     private Bag bag;
     private Player player;
     Scanner scanner = new Scanner(System.in);
-    private int wordCount = 0;
+    private static int wordCount = 0;
 
     public Game(String playerName) {
         board = new Board();
@@ -135,75 +135,21 @@ public class Game {
         }
 
         player.draw(bag.getNLetters(wordSize));
-        printWord(createdWord);
     }
 
     public boolean verifWin(Game game) {
         return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();
     }
 
-    public void printWord(List<Letter> word) throws InvalidPositionException {
-        String directionString;
-        Direction direction;
-        boolean tf = true;
-        char frontx;
-        int fronty;
-        int x = 0;
-        int y = 0;
-
-        do {
-            System.out.println("Dans quelle direction voulez-vous placer votre mot ? ("
-                    + Direction.HORIZONTAL.getCommand() + "/" + Direction.VERTICAL.getCommand() + ")");
-            directionString = scanner.next().toUpperCase();
-            if ((!directionString.equals(Direction.HORIZONTAL.getCommand()))
-                    && (!directionString.equals(Direction.VERTICAL.getCommand())))
-                System.err.println("Commande inconnu.");
-        } while ((!directionString.equals(Direction.HORIZONTAL.getCommand()))
-                && (!directionString.equals(Direction.VERTICAL.getCommand())));
-
-        if (directionString.equals(Direction.HORIZONTAL.getCommand()))
-            direction = Direction.HORIZONTAL;
-        else
-            direction = Direction.VERTICAL;
-
-        while (tf) {
-            System.out.println("A quelle position voulez-vous placer votre mot ? (x y)");
-            frontx = scanner.next().charAt(0);
-            frontx = Character.toUpperCase(frontx);
-            fronty = scanner.nextInt();
-            x = Utility.frontToBackCoord(frontx, fronty)[0];
-            y = Utility.frontToBackCoord(frontx, fronty)[1];
-
-            if (wordCount == 0) {
-                tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize()))
-                        || (!firstWordIsOnStar(word, x, y, direction));
-            } else {
-                tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize())
-                        || !(playedWordIsConnectedToTheRest(word, x, y, direction)));
-            }
-
-            if (frontx < 'A' || frontx > 'O') {
-                System.out.println("Erreur : x doit être un caractère entre 'a' et 'o'.");
-            } else if (fronty < 1 || fronty > board.getSize()) {
-                System.out.println(
-                        "Erreur : y doit être un entier entre 1 et " + Integer.toString(board.getSize()) + ".");
-            } else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
-                System.out.println("Erreur : le mot doit passer par la case centrale.");
-            } else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
-                System.out.println("Erreur : le mot doit être connecté aux autres.");
-            } else
-                tf = false;
-        }
-        board.placeWord(word, direction, y, x);
-        wordCount++;
-        board.print();
-    }
 
     public boolean canPlay(List<Letter> word, int x, int y, Direction direction) throws InvalidPositionException {
+        System.out.println("wordCount: " + wordCount);
         if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
             throw new InvalidPositionException("Le premier mot doit passer par le centre.");
         else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
             throw new InvalidPositionException("Le mot doit être connecté au autres");
+        else if (board.verifLetterIsOutOfBoard(word, direction, x, y))
+            throw new InvalidPositionException("Le mot dépasse du plateau");
         return true;
     }
 
@@ -252,5 +198,9 @@ public class Game {
 
     public Board getBoard() {
         return this.board;
+    }
+
+    public void incrementWordCount() {
+        wordCount++;
     }
 }

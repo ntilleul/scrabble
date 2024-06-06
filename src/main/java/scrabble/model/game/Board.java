@@ -3,6 +3,7 @@ package scrabble.model.game;
 import java.util.List;
 
 import scrabble.model.letter.Letter;
+import scrabble.utilities.Exceptions.InvalidPositionException;
 
 public class Board {
 
@@ -117,6 +118,31 @@ public class Board {
 			}
 		}
 	}
+
+	public boolean verifLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y) {
+		for (int i = 0; i < word.size(); i++) {
+			if (direction == Direction.HORIZONTAL) {
+				try{
+					while (!getTile(x, y + i).isEmpty()) {
+						y++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					return true;
+				}
+			} else {
+				try{
+					while (!getTile(x + i, y).isEmpty()) {
+						x++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+
 
 	public boolean letterNextToCoord(int x, int y) {
 		Boolean letterUp;

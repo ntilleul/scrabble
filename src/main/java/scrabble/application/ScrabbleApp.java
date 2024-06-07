@@ -25,12 +25,11 @@ import scrabble.model.game.Game;
 import scrabble.model.game.Multiplier;
 import scrabble.model.game.Tile;
 import scrabble.model.letter.Letter;
-import scrabble.model.player.Deck;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InvalidPositionException;
-import scrabble.utilities.Exceptions.JokerException;
 import scrabble.model.game.Direction;
+import javafx.geometry.Insets;
 
 public class ScrabbleApp extends Application {
 
@@ -82,21 +81,25 @@ public class ScrabbleApp extends Application {
 
         Player player1 = game.getPlayer();
         List<Letter> ls = new ArrayList<>();
-        ls.add(Letter.JOKER);
-        ls.add(Letter.JOKER);
         player1.draw(ls);
 
         Label lblPlayer1 = new Label("Score " + player1.getName() + " : " + player1.getPoint());
+        lblPlayer1.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10px;");
+
         Label lblTop = new Label("SCRABBLE");
+        lblTop.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-padding: 20px;");
 
         Board board = game.getBoard();
         GridPane gridPane = createBoardGridPane(board);
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setStyle("-fx-padding: 25px;");
+        gridPane.setStyle("-fx-padding: 10px;");
 
         HBox deck = new HBox();
         deck.getChildren().addAll(getDeckPrinting(player1.getLetters()));
+        deck.setSpacing(5);
+
         TextField tf_word = new TextField();
+        tf_word.setMaxWidth(200);
         Label err = new Label();
         err.setTextFill(Color.RED);
 
@@ -146,9 +149,13 @@ public class ScrabbleApp extends Application {
                 }
             }
         });
-        HBox btns = new HBox(btn_changeDeck, btn_jouer);
+        HBox btns = new HBox(10, btn_changeDeck, btn_jouer);
+        VBox.setMargin(btns, new Insets(0, 20, 20, 20));
 
         VBox vbox = new VBox(lblPlayer1, deck, tf_word, err, btns);
+        VBox.setMargin(deck, new Insets(0, 0, 20, 20));
+        VBox.setMargin(err , new Insets(0, 0, 0, 20));
+        VBox.setMargin(tf_word, new Insets(0, 0, 0, 20));
 
         BorderPane root = new BorderPane();
         root.setTop(lblTop);
@@ -156,7 +163,8 @@ public class ScrabbleApp extends Application {
         root.setBottom(vbox);
         root.setCenter(gridPane);
 
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, 1000, 900);
+        root.setStyle("-fx-background-color: lightgrey;");
         secondaryStage.setTitle("Scrabble");
         secondaryStage.setScene(scene);
         secondaryStage.setResizable(false);
@@ -168,6 +176,7 @@ public class ScrabbleApp extends Application {
 
         Stage stage = new Stage();
         Label title = new Label("Choisisez la direction / position");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         Label lbl_direction = new Label("direction");
         ComboBox<String> cb_direction = new ComboBox<>();
@@ -251,7 +260,13 @@ public class ScrabbleApp extends Application {
         grid.add(tf_position, 1, 1);
         grid.add(err_position, 1, 2);
 
-        VBox root = new VBox(title, grid, err_general, btn_accept);
+        grid.setHgap(10);
+        grid.setPadding(new Insets(10, 0, 0, 70));
+
+        VBox root = new VBox(10, title, grid, err_general, btn_accept);
+        root.setPadding(new Insets(10));
+        root.setAlignment(Pos.CENTER);
+
         Scene scene = new Scene(root, 500, 200);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
@@ -335,7 +350,11 @@ public class ScrabbleApp extends Application {
     public List<Label> getDeckPrinting(List<Letter> letters) {
         List<Label> deck = new ArrayList<Label>();
         for (Letter letter : letters) {
-            deck.add(new Label(Character.toString(letter.getValue())));
+            Label letterInDeck = new Label(Character.toString(letter.getValue()));
+            letterInDeck.setMinSize(25, 35);
+            letterInDeck.setMaxSize(25, 35);
+            letterInDeck.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-size: 20px; -fx-background-color:white;");
+            deck.add(letterInDeck);
         }
         return deck;
     }

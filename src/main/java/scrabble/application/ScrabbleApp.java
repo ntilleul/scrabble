@@ -135,14 +135,17 @@ public class ScrabbleApp extends Application {
                     Letter.resetJokerValue();
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
-                    // TODO: add points to player
+                    //TODO : ajouter points au bon joueur par la suite
+                    game.countPoints(word, player1);
+                    updatePlayerScore(player1, lblPlayer1);
+
                     game.makerPlayerDraw(player1, word.size());
                     deck.getChildren().clear();
                     deck.getChildren().addAll(getDeckPrinting(player1.getLetters()));
                     tf_word.clear();
-
                     if (game.verifWin(game)) {
-                        endGameStage();
+                        secondaryStage.close();
+                        endGameStage(player1.getName(), player1.getPoint());
                     }
                 } catch (Exception e) {
                     err.setText(e.getMessage());
@@ -261,7 +264,7 @@ public class ScrabbleApp extends Application {
         grid.add(err_position, 1, 2);
 
         grid.setHgap(10);
-        grid.setPadding(new Insets(10, 0, 0, 70));
+        grid.setPadding(new Insets(0, 0, 0, 50));
 
         VBox root = new VBox(10, title, grid, err_general, btn_accept);
         root.setPadding(new Insets(10));
@@ -369,9 +372,11 @@ public class ScrabbleApp extends Application {
         }
     }
 
-    public void endGameStage() {
+    public void endGameStage(String playerName, int playerScore) {
         Stage endGameStage = new Stage();
-        Label lblEndGame = new Label("Fin de la partie");
+        Label lblEndGame = new Label("Fin de la partie\n" + playerName + ": " + playerScore + " points");
+        lblEndGame.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
         Button btnEndGame = new Button("Quitter");
         btnEndGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -379,13 +384,19 @@ public class ScrabbleApp extends Application {
                 endGameStage.close();
             }
         });
+
         VBox endGameLayout = new VBox(20, lblEndGame, btnEndGame);
         endGameLayout.setAlignment(Pos.CENTER);
         endGameLayout.setStyle("-fx-padding: 25px;");
+
         Scene scene = new Scene(endGameLayout, 400, 300);
         endGameStage.setTitle("Fin de la partie");
         endGameStage.setScene(scene);
         endGameStage.show();
+    }
+
+    public void updatePlayerScore(Player player, Label lblPlayer) {
+        lblPlayer.setText("Score " + player.getName() + " : " + player.getPoint());
     }
 
     public static void main(String[] args) {

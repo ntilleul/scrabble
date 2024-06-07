@@ -220,4 +220,14 @@ public class Game {
     public void incrementWordCount() {
         wordCount++;
     }
+
+    public void countPoints(List<Letter> word, Player player) {
+        for (Letter letter : word) {
+            player.addPoint(letter.getPoints());
+        }
+
+        if (player.getDeckSize() == 0) {
+            player.addPoint(50);
+        }
+    }
 }

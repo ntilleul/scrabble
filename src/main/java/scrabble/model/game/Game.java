@@ -143,12 +143,11 @@ public class Game {
 
 
     public boolean canPlay(List<Letter> word, int x, int y, Direction direction) throws InvalidPositionException {
-        System.out.println("wordCount: " + wordCount);
-        if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
+                if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
             throw new InvalidPositionException("Le premier mot doit passer par le centre.");
         else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
             throw new InvalidPositionException("Le mot doit être connecté au autres");
-        else if (board.verifLetterIsOutOfBoard(word, direction, x, y))
+        else if (board.verifyLetterIsOutOfBoard(word, direction, y, x))
             throw new InvalidPositionException("Le mot dépasse du plateau");
         return true;
     }

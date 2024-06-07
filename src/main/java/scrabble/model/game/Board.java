@@ -119,14 +119,15 @@ public class Board {
 		}
 	}
 
-	public boolean verifLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y) {
+	public boolean verifyLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y) throws InvalidPositionException {
 		for (int i = 0; i < word.size(); i++) {
 			if (direction == Direction.HORIZONTAL) {
 				try{
 					while (!getTile(x, y + i).isEmpty()) {
 						y++;
 					}
-				} catch (ArrayIndexOutOfBoundsException e) {
+				}
+				catch (ArrayIndexOutOfBoundsException e) {
 					return true;
 				}
 			} else {
@@ -134,7 +135,8 @@ public class Board {
 					while (!getTile(x + i, y).isEmpty()) {
 						x++;
 					}
-				} catch (ArrayIndexOutOfBoundsException e) {
+				}
+				catch (ArrayIndexOutOfBoundsException e) {
 					return true;
 				}
 			}

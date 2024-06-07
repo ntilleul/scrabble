@@ -1,5 +1,6 @@
 package scrabble.model.player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import scrabble.model.letter.Letter;
@@ -23,8 +24,16 @@ public class Player {
         point += amount;
     }
 
-    public Letter getRid(int index) {
-        return deck.removeLetter(index);
+    public void clearDeck() {
+        deck.clear();
+    }
+
+    public List<Letter> getRid(List<Letter> letters) {
+        List<Letter> ls = new ArrayList<Letter>();
+        for (Letter letter : letters) {
+            ls.add(deck.removeLetter(letter));
+        }
+        return ls;
     }
 
     public void draw(List<Letter> letters) {

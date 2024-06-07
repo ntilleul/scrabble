@@ -22,11 +22,14 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import scrabble.model.game.Board;
 import scrabble.model.game.Game;
+import scrabble.model.game.Multiplier;
 import scrabble.model.game.Tile;
 import scrabble.model.letter.Letter;
+import scrabble.model.player.Deck;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.utilities.Exceptions.JokerException;
 import scrabble.model.game.Direction;
 
 public class ScrabbleApp extends Application {
@@ -78,12 +81,18 @@ public class ScrabbleApp extends Application {
         Game game = new Game(strPlayer1);
 
         Player player1 = game.getPlayer();
+        List<Letter> ls = new ArrayList<>();
+        ls.add(Letter.JOKER);
+        ls.add(Letter.JOKER);
+        player1.draw(ls);
 
         Label lblPlayer1 = new Label("Score " + player1.getName() + " : " + player1.getPoint());
         Label lblTop = new Label("SCRABBLE");
 
         Board board = game.getBoard();
         GridPane gridPane = createBoardGridPane(board);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setStyle("-fx-padding: 25px;");
 
         HBox deck = new HBox();
         deck.getChildren().addAll(getDeckPrinting(player1.getLetters()));
@@ -107,20 +116,28 @@ public class ScrabbleApp extends Application {
             public void handle(MouseEvent event) {
                 err.setText("");
                 String wordString = tf_word.getText().toUpperCase();
-                List<Letter> word = game.createWord(wordString);
                 try {
-                    if (game.verifWord(wordString))
-                        System.out.println(true);
+                    game.verifWord(wordString);
+                    List<Letter> word;
+                    int nJoker = game.nJokerInWord(wordString);
+                    if (nJoker > 0)
+                        word = game.createWord(wordString, askLetterJoker(secondaryStage, nJoker));
+                    else
+                        word = game.createWord(wordString);
                     List<Object> pos = openPositionSelector(secondaryStage, game, word);
                     Direction direction = (Direction) pos.get(0);
                     int xBack = (int) pos.get(1);
                     int yBack = (int) pos.get(2);
-                    board.placeWord(word, direction, yBack, xBack);
+                    board.placeWord(player1.getRid(word), direction, yBack, xBack);
+                    Letter.resetJokerValue();
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
-                    //TODO: add points to player
-                    //TODO: refresh player deck
-                    //TODO: refresh player score
+                    // TODO: add points to player
+                    game.makerPlayerDraw(player1, word.size());
+                    deck.getChildren().clear();
+                    deck.getChildren().addAll(getDeckPrinting(player1.getLetters()));
+                    tf_word.clear();
+
                     if (game.verifWin(game)) {
                         endGameStage();
                     }
@@ -136,13 +153,13 @@ public class ScrabbleApp extends Application {
         BorderPane root = new BorderPane();
         root.setTop(lblTop);
         BorderPane.setAlignment(lblTop, Pos.CENTER);
-        root.setLeft(vbox);
+        root.setBottom(vbox);
         root.setCenter(gridPane);
-        root.setStyle("-fx-padding: 25px;");
 
         Scene scene = new Scene(root, 1000, 800);
         secondaryStage.setTitle("Scrabble");
         secondaryStage.setScene(scene);
+        secondaryStage.setResizable(false);
         secondaryStage.show();
     }
 
@@ -248,7 +265,7 @@ public class ScrabbleApp extends Application {
 
     private static final int TILE_SIZE = 40;
 
-    //TODO: possiblement refaire la création du board
+    // TODO: possiblement refaire la création du board
     private GridPane createBoardGridPane(Board board) {
         GridPane gridPane = new GridPane();
         for (int i = 0; i < Board.getSize(); i++) {
@@ -257,11 +274,62 @@ public class ScrabbleApp extends Application {
                 Label label = new Label(tile.toString());
                 label.setMinSize(TILE_SIZE, TILE_SIZE);
                 label.setMaxSize(TILE_SIZE, TILE_SIZE);
-                label.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-size: 16;");
+                label.setStyle(
+                        "-fx-border-color: black; -fx-alignment: center; -fx-font-size: 16; -fx-background-color: "
+                                + tile.getMultiplier().getColor());
+                if (tile.getMultiplier().equals(Multiplier.LETTER_3) || tile.getMultiplier().equals(Multiplier.WORD_3))
+                    label.setTextFill(Color.WHITE);
                 gridPane.add(label, j + 1, i + 1);
             }
         }
         return gridPane;
+    }
+
+    private List<Character> askLetterJoker(Stage primaryStage, int nJoker) {
+        List<Character> chars = new ArrayList<Character>();
+        Stage stage = new Stage();
+        Label title = new Label("Par quel lettre voulez-vous remplacer le joker ?");
+        TextField textField = new TextField();
+        Button btn_valider = new Button("Valider");
+        Label err = new Label();
+        err.setTextFill(Color.RED);
+
+        VBox vbox = new VBox(title, textField, err, btn_valider);
+        Scene scene = new Scene(vbox, 400, 400);
+
+        btn_valider.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                String caracString = textField.getText().toUpperCase();
+                err.setText("");
+                if (caracString.length() != nJoker) {
+                    err.setText("Veuillez rentrer " + Integer.toString(nJoker) + " caractères.");
+                } else {
+                    int i = 0;
+                    while (i < caracString.length()) {
+                        if (caracString.charAt(i) < 'A' && caracString.charAt(i) > 'Z') {
+                            err.setText("Veuillez ne rentrer que les caractères alphabetique");
+                            break;
+                        } else {
+                            chars.add(caracString.charAt(i));
+                            i++;
+                        }
+                    }
+                }
+                if (err.getText().equals(""))
+                    stage.close();
+            }
+        });
+
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(primaryStage);
+        stage.setTitle("choix du joker");
+        stage.showAndWait();
+        return chars;
+
     }
 
     public List<Label> getDeckPrinting(List<Letter> letters) {
@@ -282,8 +350,7 @@ public class ScrabbleApp extends Application {
         }
     }
 
-
-    public void endGameStage(){
+    public void endGameStage() {
         Stage endGameStage = new Stage();
         Label lblEndGame = new Label("Fin de la partie");
         Button btnEndGame = new Button("Quitter");

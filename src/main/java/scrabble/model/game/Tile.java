@@ -5,9 +5,14 @@ import scrabble.model.letter.Letter;
 public class Tile {
     private Multiplier multiplier;
     private Letter letter;
+    private char jokerValue;
 
     public Tile(Multiplier multiplier) {
         this.multiplier = multiplier;
+    }
+
+    public boolean letterIsJoker() {
+        return letter == Letter.JOKER;
     }
 
     public Multiplier getMultiplier() {
@@ -24,6 +29,16 @@ public class Tile {
 
     public void setLetter(Letter letter) {
         this.letter = letter;
+        if (letterIsJoker())
+            setJokerValue(letter.getValue());
+    }
+
+    public char getJokerValue() {
+        return jokerValue;
+    }
+
+    public void setJokerValue(char c) {
+        this.jokerValue = c;
     }
 
     public boolean isEmpty() {
@@ -33,7 +48,9 @@ public class Tile {
     public String toString() {
         if (isEmpty())
             return this.multiplier.toString();
+        else if (letterIsJoker())
+            return Character.toString(this.jokerValue);
         else
-            return " " + this.letter.toString() + " ";
+            return this.letter.toString();
     }
 }

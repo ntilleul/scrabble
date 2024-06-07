@@ -6,15 +6,15 @@ import scrabble.utilities.Utility;
 
 public enum Letter {
 
-    A('A', 1, 9), B('B', 3,2), C('C', 3,2), D('D', 2,3), E('E', 1,15), F('F', 4,2), G('G', 2,2), H('H', 4,2),
-    I('I', 1,8), J('J', 8,1), K('K', 10,1), L('L', 1,5), M('M', 2,3), N('N', 1,6), O('O', 1,6), P('P', 3,2),
-    Q('Q', 8,1), R('R', 1,6), S('S', 1,6), T('T', 1,6), U('U', 1,6), V('V', 4,2), W('W', 10,1), X('X', 10,1),
-    Y('Y', 10,1), Z('Z', 10,1), JOKER('?', 0,2);
+    A('A', 1, 9), B('B', 3, 2), C('C', 3, 2), D('D', 2, 3), E('E', 1, 15), F('F', 4, 2), G('G', 2, 2), H('H', 4, 2),
+    I('I', 1, 8), J('J', 8, 1), K('K', 10, 1), L('L', 1, 5), M('M', 2, 3), N('N', 1, 6), O('O', 1, 6), P('P', 3, 2),
+    Q('Q', 8, 1), R('R', 1, 6), S('S', 1, 6), T('T', 1, 6), U('U', 1, 6), V('V', 4, 2), W('W', 10, 1), X('X', 10, 1),
+    Y('Y', 10, 1), Z('Z', 10, 1), JOKER('?', 0, 1);
 
     private char value;
     private final int points;
     private int number;
-    private static Scanner scanner;
+    private static boolean joker1Used = false;
 
     Letter(char value, int points, int number) {
         this.value = value;
@@ -41,19 +41,24 @@ public enum Letter {
     public void incrementNumber() {
         this.number++;
     }
-    
-    public static char changeJokerValue() {
-    	String choice;
-    	char newValue;
-    	scanner = new Scanner(System.in);
-    	System.out.println("Choisissez par quelle lettre vous voulez remplacer le Joker :");
-    	choice = scanner.next().toUpperCase();
-    	while ((choice.length() != 1) && (!Utility.verifyLetter(choice.charAt(0)))) {
-    		System.out.println("Choisissez par quelle lettre vous voulez remplacer le Joker :");
-    		choice = scanner.next().toUpperCase();
-    	}
-    	newValue = choice.charAt(0);
-    	return newValue;
-    	
+
+    public void setValue(char v) {
+        this.value = v;
+    }
+
+    public static void resetJokerValue() {
+        Letter.JOKER.setValue('?');
+    }
+
+    public String toString() {
+        return Character.toString(value);
+    }
+
+    public static boolean isJoker1Used() {
+        return joker1Used;
+    }
+
+    public static void useJoker1() {
+        joker1Used = true;
     }
 }

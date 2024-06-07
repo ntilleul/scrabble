@@ -69,7 +69,7 @@ public class MainMenu {
 
                     boolean invalidWord = game.verifWord(stringInput);
                     if (!invalidWord) {
-                        game.playWord(stringInput);
+                        // TODO
                     }
                     System.out.println();
                     break;

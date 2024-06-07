@@ -20,8 +20,18 @@ public class Deck {
         letters.add(letter);
     }
 
-    public Letter removeLetter(int index) {
-        return letters.remove(index);
+    public void clear() {
+        letters.clear();
+    }
+
+    public Letter getLetter(Letter letter) {
+        return letters.get(letters.indexOf(letter));
+    }
+
+    public Letter removeLetter(Letter letter) {
+        Letter l = getLetter(letter);
+        letters.remove(letter);
+        return l;
     }
 
     public int size() {

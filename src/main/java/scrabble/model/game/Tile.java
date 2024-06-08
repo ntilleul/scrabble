@@ -29,8 +29,6 @@ public class Tile {
 
     public void setLetter(Letter letter) {
         this.letter = letter;
-        if (letterIsJoker())
-            setJokerValue(letter.getValue());
     }
 
     public char getJokerValue() {

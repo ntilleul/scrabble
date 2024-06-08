@@ -4,6 +4,7 @@ import org.junit.Test;
 import scrabble.model.game.Game;
 import scrabble.model.game.Direction;
 import scrabble.model.letter.Letter;
+import scrabble.model.letter.Word;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,10 +36,10 @@ public class GameTest {
     @Test
     public void playedWordIsConnectedToTheRestShouldReturnTrueWhenWordIsConnected() {
         Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
         game.getBoard().placeWord(word, Direction.HORIZONTAL, 7, 7);
 
-        boolean result = game.playedWordIsConnectedToTheRest(word, 7, 8, Direction.HORIZONTAL);
+        boolean result = game.playedWordIsConnectedToTheRest(word.getLetters(), 7, 8, Direction.HORIZONTAL);
 
         assertTrue(result);
     }

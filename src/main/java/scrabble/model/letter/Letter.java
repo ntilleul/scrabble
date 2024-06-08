@@ -46,6 +46,10 @@ public enum Letter {
         this.value = v;
     }
 
+    public static void setJokerValue(char c) {
+        Letter.JOKER.setValue(c);
+    }
+
     public static void resetJokerValue() {
         Letter.JOKER.setValue('?');
     }

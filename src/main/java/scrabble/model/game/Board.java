@@ -3,6 +3,7 @@ package scrabble.model.game;
 import java.util.List;
 
 import scrabble.model.letter.Letter;
+import scrabble.model.letter.Word;
 import scrabble.utilities.Exceptions.InvalidPositionException;
 
 public class Board {
@@ -99,52 +100,63 @@ public class Board {
 		return boardSize / 2 + 1;
 	}
 
+	public void placeLetter(Letter letter, int x, int y, char jokerValue) {
+		getTile(x, y).setLetter(letter);
+		getTile(x, y).setJokerValue(jokerValue);
+	}
+
 	public void placeLetter(Letter letter, int x, int y) {
 		getTile(x, y).setLetter(letter);
 	}
 
-	public void placeWord(List<Letter> word, Direction direction, int x, int y) {
+	public void placeWord(Word word, Direction direction, int x, int y) {
+		System.out.println(word.getJokerValues());
 		for (int i = 0; i < word.size(); i++) {
 			if (direction == Direction.HORIZONTAL) {
 				while (!getTile(x, y + i).isEmpty()) {
 					y++;
 				}
-				placeLetter(word.get(i), x, y + i);
+				Letter letter = word.getLetterAt(i);
+				if (letter == Letter.JOKER)
+					placeLetter(word.getLetterAt(i), x, y + i, word.getJokerValueAt(i));
+				else
+					placeLetter(word.getLetterAt(i), x, y + i);
 			} else {
 				while (!getTile(x + i, y).isEmpty()) {
 					x++;
 				}
-				placeLetter(word.get(i), x + i, y);
+				Letter letter = word.getLetterAt(i);
+				if (letter == Letter.JOKER)
+					placeLetter(word.getLetterAt(i), x + i, y, word.getJokerValueAt(i));
+				else
+					placeLetter(word.getLetterAt(i), x + i, y);
 			}
 		}
 	}
 
-	public boolean verifyLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y) throws InvalidPositionException {
+	public boolean verifyLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y)
+			throws InvalidPositionException {
 		for (int i = 0; i < word.size(); i++) {
 			if (direction == Direction.HORIZONTAL) {
-				try{
+				try {
 					while (!getTile(x, y + i).isEmpty()) {
 						y++;
 					}
-				}
-				catch (ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					return true;
 				}
 			} else {
-				try{
+				try {
 					while (!getTile(x + i, y).isEmpty()) {
 						x++;
 					}
-				}
-				catch (ArrayIndexOutOfBoundsException e) {
+				} catch (ArrayIndexOutOfBoundsException e) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-
-
 
 	public boolean letterNextToCoord(int x, int y) {
 		Boolean letterUp;

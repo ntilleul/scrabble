@@ -25,6 +25,7 @@ import scrabble.model.game.Game;
 import scrabble.model.game.Multiplier;
 import scrabble.model.game.Tile;
 import scrabble.model.letter.Letter;
+import scrabble.model.letter.Word;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InvalidPositionException;
@@ -81,6 +82,8 @@ public class ScrabbleApp extends Application {
 
         Player player1 = game.getPlayer();
         List<Letter> ls = new ArrayList<>();
+        ls.add(Letter.JOKER);
+        ls.add(Letter.JOKER);
         player1.draw(ls);
 
         Label lblPlayer1 = new Label("Score " + player1.getName() + " : " + player1.getPoint());
@@ -121,22 +124,22 @@ public class ScrabbleApp extends Application {
                 String wordString = tf_word.getText().toUpperCase();
                 try {
                     game.verifWord(wordString);
-                    List<Letter> word;
+                    Word word;
                     int nJoker = game.nJokerInWord(wordString);
                     if (nJoker > 0)
-                        word = game.createWord(wordString, askLetterJoker(secondaryStage, nJoker));
+                        word = new Word(wordString, askLetterJoker(secondaryStage, nJoker));
                     else
-                        word = game.createWord(wordString);
-                    List<Object> pos = openPositionSelector(secondaryStage, game, word);
+                        word = new Word(wordString);
+                    List<Object> pos = openPositionSelector(secondaryStage, game, word.getLetters());
                     Direction direction = (Direction) pos.get(0);
                     int xBack = (int) pos.get(1);
                     int yBack = (int) pos.get(2);
-                    board.placeWord(player1.getRid(word), direction, yBack, xBack);
-                    Letter.resetJokerValue();
+                    player1.getRid(word.getLetters());
+                    board.placeWord(word, direction, yBack, xBack);
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
-                    //TODO : ajouter points au bon joueur par la suite
-                    game.countPoints(word, player1);
+                    // TODO : ajouter points au bon joueur par la suite
+                    game.countPoints(word.getLetters(), player1);
                     updatePlayerScore(player1, lblPlayer1);
 
                     game.makerPlayerDraw(player1, word.size());
@@ -157,7 +160,7 @@ public class ScrabbleApp extends Application {
 
         VBox vbox = new VBox(lblPlayer1, deck, tf_word, err, btns);
         VBox.setMargin(deck, new Insets(0, 0, 20, 20));
-        VBox.setMargin(err , new Insets(0, 0, 0, 20));
+        VBox.setMargin(err, new Insets(0, 0, 0, 20));
         VBox.setMargin(tf_word, new Insets(0, 0, 0, 20));
 
         BorderPane root = new BorderPane();
@@ -356,13 +359,15 @@ public class ScrabbleApp extends Application {
             Label letterInDeck = new Label(Character.toString(letter.getValue()));
             letterInDeck.setMinSize(25, 35);
             letterInDeck.setMaxSize(25, 35);
-            letterInDeck.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-size: 20px; -fx-background-color:white;");
+            letterInDeck.setStyle(
+                    "-fx-border-color: black; -fx-alignment: center; -fx-font-size: 20px; -fx-background-color:white;");
             deck.add(letterInDeck);
         }
         return deck;
     }
 
     private void refreshBoardDisplay(Board board, GridPane gridPane) {
+        System.out.println(true);
         for (int i = 0; i < Board.getSize(); i++) {
             for (int j = 0; j < Board.getSize(); j++) {
                 Tile tile = board.getTile(i, j);

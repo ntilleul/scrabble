@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import scrabble.model.letter.Letter;
+import scrabble.model.letter.Word;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InsufficientLettersException;
@@ -102,28 +103,24 @@ public class Game {
         return count;
     }
 
-    public List<Letter> createWord(String word, List<Character> jokerChar) {
-        List<Letter> letterList = new ArrayList<>();
-        int iJoker = 0;
-        for (int i = 0; i < word.length(); i++) {
-            char letterChar = word.charAt(i);
-            Letter letter;
-            if (letterChar == '?') {
-                letter = Letter.JOKER;
-                letter.setValue(jokerChar.get(iJoker));
-                iJoker++;
-            } else {
-                letter = Letter.valueOf(Character.toString(letterChar));
-            }
-            letterList.add(letter);
-        }
-        return letterList;
-    }
+    // public Word createWord(String word, List<Character> jokerChar) {
+    // List<Letter> letterList = new ArrayList<>();
+    // for (int i = 0; i < word.length(); i++) {
+    // char letterChar = word.charAt(i);
+    // Letter letter;
+    // if (letterChar == '?') {
+    // letter = Letter.JOKER;
+    // } else {
+    // letter = Letter.valueOf(Character.toString(letterChar));
+    // }
+    // letterList.add(letter);
+    // }
+    // return new Word(letterList, jokerChar);
+    // }
 
-    public List<Letter> createWord(String word) {
-        List<Character> chars = new ArrayList<>();
-        return createWord(word, chars);
-    }
+    // public Word createWord(String word) {
+    //     return createWord(word, new ArrayList<>());
+    // }
 
     // public void playWord(String stringInput) throws InvalidPositionException {
     // int wordSize = stringInput.length();

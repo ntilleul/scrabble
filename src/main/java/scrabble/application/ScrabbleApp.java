@@ -82,8 +82,6 @@ public class ScrabbleApp extends Application {
 
         Player player1 = game.getPlayer();
         List<Letter> ls = new ArrayList<>();
-        ls.add(Letter.JOKER);
-        ls.add(Letter.JOKER);
         player1.draw(ls);
 
         Label lblPlayer1 = new Label("Score " + player1.getName() + " : " + player1.getPoint());
@@ -173,7 +171,8 @@ public class ScrabbleApp extends Application {
         root.setStyle("-fx-background-color: lightgrey;");
         secondaryStage.setTitle("Scrabble");
         secondaryStage.setScene(scene);
-        secondaryStage.setResizable(false);
+        secondaryStage.setResizable(true);
+        secondaryStage.setAlwaysOnTop(true);
         secondaryStage.show();
     }
 

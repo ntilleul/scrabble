@@ -12,6 +12,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class GameTest {
-
-
+    @Test
+    public void playedWordIsWorth7() {
+        Game game = new Game();
+        List<Letter> letters = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        Word word = new Word(letters);
+        game.getBoard().placeWord(word, Direction.HORIZONTAL, 7, 7);
+        assertEquals(7, game.countPoints(letters, game.getPlayer(), 7, 7, Direction.HORIZONTAL));
+    }
 }

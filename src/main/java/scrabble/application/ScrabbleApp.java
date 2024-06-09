@@ -1,11 +1,10 @@
 package scrabble.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,23 +13,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.scene.paint.Color;
-import scrabble.model.game.Board;
-import scrabble.model.game.Game;
-import scrabble.model.game.Multiplier;
-import scrabble.model.game.Tile;
+import scrabble.model.game.*;
 import scrabble.model.letter.Letter;
 import scrabble.model.letter.Word;
 import scrabble.model.player.Player;
-import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InvalidPositionException;
-import scrabble.model.game.Direction;
-import javafx.geometry.Insets;
+import scrabble.utilities.Utility;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScrabbleApp extends Application {
 
@@ -124,11 +120,20 @@ public class ScrabbleApp extends Application {
                     game.verifWord(wordString);
                     Word word;
                     int nJoker = game.nJokerInWord(wordString);
-                    if (nJoker > 0)
-                        word = new Word(wordString, askLetterJoker(secondaryStage, nJoker));
-                    else
+                    if (nJoker > 0) {
+                        List<Character> chars = askLetterJoker(secondaryStage, nJoker);
+                        if (chars.isEmpty()) {
+                            err.setText("Choix de lettre pour joker annulé.");
+                            return;
+                        }
+                        word = new Word(wordString, chars);
+                    } else
                         word = new Word(wordString);
                     List<Object> pos = openPositionSelector(secondaryStage, game, word.getLetters());
+                    if (pos.isEmpty()) {
+                        err.setText("Sélection de position annulée.");
+                        return;
+                    }
                     Direction direction = (Direction) pos.get(0);
                     int xBack = (int) pos.get(1);
                     int yBack = (int) pos.get(2);
@@ -257,6 +262,15 @@ public class ScrabbleApp extends Application {
             }
         });
 
+        Button btn_cancel = new Button("Annuler");
+        btn_cancel.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                pos.clear();
+                stage.close();
+            }
+        });
+
         GridPane grid = new GridPane();
         grid.add(lbl_direction, 0, 0);
         grid.add(cb_direction, 0, 1);
@@ -268,7 +282,10 @@ public class ScrabbleApp extends Application {
         grid.setHgap(10);
         grid.setPadding(new Insets(0, 0, 0, 50));
 
-        VBox root = new VBox(10, title, grid, err_general, btn_accept);
+        HBox buttonBox = new HBox(10, btn_accept, btn_cancel);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        VBox root = new VBox(10, title, grid, err_general, buttonBox);
         root.setPadding(new Insets(10));
         root.setAlignment(Pos.CENTER);
 
@@ -309,13 +326,19 @@ public class ScrabbleApp extends Application {
         List<Character> chars = new ArrayList<Character>();
         Stage stage = new Stage();
         Label title = new Label("Par quel lettre voulez-vous remplacer le joker ?");
+        title.setStyle("-fx-font-size: 15px; -fx-font-weight: bold;");
         TextField textField = new TextField();
+        textField.setStyle("-fx-font-size: 14px; -fx-pref-width: 200px;");
         Button btn_valider = new Button("Valider");
+        Button btn_annuler = new Button("Annuler");
         Label err = new Label();
         err.setTextFill(Color.RED);
 
-        VBox vbox = new VBox(title, textField, err, btn_valider);
-        Scene scene = new Scene(vbox, 400, 400);
+        VBox vbox = new VBox(title, textField, err, btn_valider, btn_annuler);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setStyle("-fx-background-color: lightgrey; -fx-border-color: #cccccc; -fx-border-width: 1px;");
+        Scene scene = new Scene(vbox, 400, 200);
 
         btn_valider.setOnMouseClicked(new EventHandler<Event>() {
             @Override
@@ -327,7 +350,7 @@ public class ScrabbleApp extends Application {
                 } else {
                     int i = 0;
                     while (i < caracString.length()) {
-                        if (caracString.charAt(i) < 'A' && caracString.charAt(i) > 'Z') {
+                        if (!(caracString.charAt(i) >= 'A' && caracString.charAt(i) <= 'Z')) {
                             err.setText("Veuillez ne rentrer que les caractères alphabetique");
                             break;
                         } else {
@@ -339,6 +362,11 @@ public class ScrabbleApp extends Application {
                 if (err.getText().equals(""))
                     stage.close();
             }
+        });
+
+        btn_annuler.setOnMouseClicked(event -> {
+            chars.clear();  // Clear the list to indicate cancellation
+            stage.close();
         });
 
         stage.setScene(scene);

@@ -82,7 +82,7 @@ public class BoardTest {
 		Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
 		board.placeWord(word, Direction.HORIZONTAL, 7, 7);
 
-		boolean result = game.getBoard().playedWordIsConnectedToTheRest(word.getLetters(), 7, 8, Direction.HORIZONTAL);
+		boolean result = board.playedWordIsConnectedToTheRest(word.getLetters(), 7, 8, Direction.HORIZONTAL);
 
 		assertTrue(result);
 	}

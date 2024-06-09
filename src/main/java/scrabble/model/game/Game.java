@@ -1,12 +1,12 @@
 package scrabble.model.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import scrabble.model.letter.Letter;
 import scrabble.model.player.Player;
 import scrabble.utilities.Utility;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Game {
 
@@ -167,7 +167,7 @@ public class Game {
                         || (!firstWordIsOnStar(word, x, y, direction));
             } else {
                 tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize())
-                        || !(playedWordIsConnectedToTheRest(word, x, y, direction))) ;
+                        || !(playedWordIsConnectedToTheRest(word, x, y, direction)));
             }
 
             if (frontx < 'A' || frontx > 'O') {
@@ -179,10 +179,10 @@ public class Game {
                 System.out.println("Erreur : le mot doit passer par la case centrale.");
             } else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
                 System.out.println("Erreur : le mot doit être connecté aux autres.");
-            } else if (board.verifLetterIsOutOfBoard(word, direction, y, x)){
+            } else if (board.verifLetterIsOutOfBoard(word, direction, y, x)) {
                 System.out.println("Erreur : le mot est en dehors du plateau.");
                 tf = true;
-            }else{
+            } else {
                 tf = false;
             }
         }
@@ -194,11 +194,10 @@ public class Game {
         for (Letter letter : word) {
             player.getLetters().remove(letter);
         }
-        player.draw(bag.getNLetters(word.size()));
-
         if (player.getDeckSize() == 0) {
             points += 50;
         }
+        player.draw(bag.getNLetters(word.size()));
 
         player.addPoint(points);
 
@@ -253,35 +252,44 @@ public class Game {
         int total = 0;
         int wordMultiplier = 1;
         if (dir.equals(Direction.HORIZONTAL)) {
-            for (int i = x; i < word.size() + x; i++) {
+            while (x > 0 && !board.getTile(y, x - 1).isEmpty()) {
+                x--;
+            }
+            int i = x;
+            while (x < board.getSize() && !board.getTile(y, i).isEmpty()) {
 
                 total += board.getTile(y, i).getPoint();
                 Multiplier multiplayer = board.getTile(y, i).getMultiplier();
 
                 if (multiplayer.equals(Multiplier.WORD_2) || multiplayer.equals(Multiplier.WORD_3)
                         || multiplayer.equals(Multiplier.STAR))
-                    wordMultiplier += multiplayer.getValue();
+                    wordMultiplier = multiplayer.getValue();
 
                 board.getTile(y, i).setMultiplier(Multiplier.DEFAULT);
-
+                i++;
             }
         } else {
-            for (int i = y; i < word.size() + x; i++) {
+            while (y > 0 && !board.getTile(y - 1, x).isEmpty()) {
+                y--;
+            }
+            int i = y;
+            while (y < board.getSize() && !board.getTile(i, x).isEmpty()) {
 
                 total += board.getTile(i, x).getPoint();
                 Multiplier multiplayer = board.getTile(i, x).getMultiplier();
 
                 if (multiplayer.equals(Multiplier.WORD_2) || multiplayer.equals(Multiplier.WORD_3)
                         || multiplayer.equals(Multiplier.STAR))
-                    wordMultiplier += multiplayer.getValue();
+                    wordMultiplier = multiplayer.getValue();
 
                 board.getTile(i, x).setMultiplier(Multiplier.DEFAULT);
+                i++;
             }
         }
         return total * wordMultiplier;
     }
 
-    public Board getBoard(){
+    public Board getBoard() {
         return this.board;
     }
 }

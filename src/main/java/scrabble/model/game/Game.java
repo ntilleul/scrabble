@@ -1,16 +1,15 @@
 package scrabble.model.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
 import scrabble.model.player.Player;
-import scrabble.utilities.Utility;
 import scrabble.utilities.Exceptions.InsufficientLettersException;
 import scrabble.utilities.Exceptions.InvalidCharacterInWordException;
 import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.utilities.Utility;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Game {
 
@@ -218,13 +217,31 @@ public class Game {
         wordCount++;
     }
 
-    public void countPoints(List<Letter> word, Player player) {
-        for (Letter letter : word) {
-            player.addPoint(letter.getPoints());
+    public int countPoints(List<Letter> word, Player player, int x, int y, Direction direction) {
+        int wordPoints = 0;
+        if (direction == Direction.HORIZONTAL) {
+            while (x > 0 && !board.getTile(y, x - 1).isEmpty()) {
+                x--;
+            }
+            int i = x;
+            while (x < board.getSize() && !board.getTile(y, i).isEmpty()) {
+                wordPoints += board.getTile(y, i).getLetter().getPoints();
+                i++;
+            }
+        } else {
+            while (y > 0 && !board.getTile(y - 1, x).isEmpty()) {
+                y--;
+            }
+            int i = y;
+            while (y < board.getSize() && !board.getTile(i, x).isEmpty()) {
+                wordPoints += board.getTile(i, x).getLetter().getPoints();
+                i++;
+            }
         }
 
         if (player.getDeckSize() == 0) {
-            player.addPoint(50);
+            wordPoints += 50;
         }
+        return wordPoints;
     }
 }

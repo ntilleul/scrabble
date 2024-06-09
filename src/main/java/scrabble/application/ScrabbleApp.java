@@ -142,7 +142,7 @@ public class ScrabbleApp extends Application {
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
                     // TODO : ajouter points au bon joueur par la suite
-                    game.countPoints(word.getLetters(), player1);
+                    player1.addPoint(game.countPoints(word.getLetters(), player1, xBack, yBack, direction));
                     updatePlayerScore(player1, lblPlayer1);
 
                     game.makerPlayerDraw(player1, word.size());
@@ -394,7 +394,6 @@ public class ScrabbleApp extends Application {
     }
 
     private void refreshBoardDisplay(Board board, GridPane gridPane) {
-        System.out.println(true);
         for (int i = 0; i < Board.getSize(); i++) {
             for (int j = 0; j < Board.getSize(); j++) {
                 Tile tile = board.getTile(i, j);

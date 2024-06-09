@@ -157,56 +157,13 @@ public class Game {
     }
 
     public boolean canPlay(List<Letter> word, int x, int y, Direction direction) throws InvalidPositionException {
-        if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
+        if (!board.firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
             throw new InvalidPositionException("Le premier mot doit passer par le centre.");
-        else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
+        else if (!board.playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
             throw new InvalidPositionException("Le mot doit être connecté au autres");
         else if (board.verifyLetterIsOutOfBoard(word, direction, y, x))
             throw new InvalidPositionException("Le mot dépasse du plateau");
         return true;
-    }
-
-    public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
-        if (dir.equals(Direction.HORIZONTAL)) {
-            if (x + word.size() < board.getMiddleSize() - 1 || x > board.getMiddleSize() - 1) {
-                return false;
-            }
-            for (int i = 0; i < word.size(); i++) {
-                if (x + i == board.getMiddleSize() - 1 && y == board.getMiddleSize() - 1) {
-                    return true;
-                }
-            }
-        } else {
-            if (y + word.size() < board.getMiddleSize() - 1 || y > board.getMiddleSize() - 1) {
-                return false;
-            }
-            for (int i = 0; i < word.size(); i++) {
-                if (y + i == board.getMiddleSize() - 1 && x == board.getMiddleSize() - 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
-        int i;
-        if (dir.equals(Direction.HORIZONTAL)) {
-            i = x;
-            do {
-                if (board.letterNextToCoord(y, i))
-                    return true;
-                i++;
-            } while (i < (word.size() + x));
-        } else {
-            i = y;
-            do {
-                if (board.letterNextToCoord(i, x))
-                    return true;
-                i++;
-            } while (i < (word.size() + y));
-        }
-        return false;
     }
 
     public Board getBoard() {

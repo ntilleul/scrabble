@@ -190,4 +190,47 @@ public class Board {
 
 		return (letterDown || letterUp || letterLeft || letterRight);
 	}
+
+	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
+		if (dir.equals(Direction.HORIZONTAL)) {
+			if (x + word.size() < getMiddleSize() - 1 || x > getMiddleSize() - 1) {
+				return false;
+			}
+			for (int i = 0; i < word.size(); i++) {
+				if (x + i == getMiddleSize() - 1 && y == getMiddleSize() - 1) {
+					return true;
+				}
+			}
+		} else {
+			if (y + word.size() < getMiddleSize() - 1 || y > getMiddleSize() - 1) {
+				return false;
+			}
+			for (int i = 0; i < word.size(); i++) {
+				if (y + i == getMiddleSize() - 1 && x == getMiddleSize() - 1) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean playedWordIsConnectedToTheRest(List<Letter> word, int horCoord, int verCoord, Direction dir) {
+		int i;
+		if (dir.equals(Direction.HORIZONTAL)) {
+			i = horCoord;
+			do {
+				if (letterNextToCoord(verCoord, i))
+					return true;
+				i++;
+			} while (i < (word.size() + horCoord));
+		} else {
+			i = verCoord;
+			do {
+				if (letterNextToCoord(i, horCoord))
+					return true;
+				i++;
+			} while (i < (word.size() + verCoord));
+		}
+		return false;
+	}
 }

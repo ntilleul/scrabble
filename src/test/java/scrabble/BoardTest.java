@@ -58,29 +58,29 @@ public class BoardTest {
 
 	@Test
 	public void firstWordIsOnStarShouldReturnTrueWhenWordIsOnStar() {
-		Game game = new Game();
+		Board board = new Board();
 		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
 
-		boolean result = game.getBoard().firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
+		boolean result = board.firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
 
 		assertTrue(result);
 	}
 
 	@Test
 	public void firstWordIsOnStarShouldReturnFalseWhenWordIsNotOnStar() {
-		Game game = new Game();
+		Board board = new Board();
 		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
 
-		boolean result = game.getBoard().firstWordIsOnStar(word, 6, 6, Direction.HORIZONTAL);
+		boolean result = board.firstWordIsOnStar(word, 6, 6, Direction.HORIZONTAL);
 
 		assertFalse(result);
 	}
 
 	@Test
 	public void playedWordIsConnectedToTheRestShouldReturnTrueWhenWordIsConnected() {
-		Game game = new Game();
+		Board board = new Board();
 		Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
-		game.getBoard().placeWord(word, Direction.HORIZONTAL, 7, 7);
+		board.placeWord(word, Direction.HORIZONTAL, 7, 7);
 
 		boolean result = game.getBoard().playedWordIsConnectedToTheRest(word.getLetters(), 7, 8, Direction.HORIZONTAL);
 
@@ -89,10 +89,10 @@ public class BoardTest {
 
 	@Test
 	public void playedWordIsConnectedToTheRestShouldReturnFalseWhenWordIsNotConnected() {
-		Game game = new Game();
+		Board board = new Board();
 		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
 
-		boolean result = game.getBoard().firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
+		boolean result = board.firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
 
 		assertFalse(result);
 	}

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import scrabble.model.game.Board;
 import scrabble.model.game.Direction;
+import scrabble.model.game.Game;
 import scrabble.model.game.Multiplier;
 import scrabble.model.letter.Letter;
 
@@ -90,5 +91,46 @@ public class BoardTest {
 	public void boardShouldInitializeWithCorrectMiddleSize() {
 		Board board = new Board();
 		assertEquals(8, board.getMiddleSize());
+	}
+
+	@Test
+	public void firstWordIsOnStarShouldReturnTrueWhenWordIsOnStar() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+
+		boolean result = board.firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
+
+		assertTrue(result);
+	}
+
+	@Test
+	public void firstWordIsOnStarShouldReturnFalseWhenWordIsNotOnStar() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+
+		boolean result = board.firstWordIsOnStar(word, 6, 6, Direction.HORIZONTAL);
+
+		assertFalse(result);
+	}
+
+	@Test
+	public void playedWordIsConnectedToTheRestShouldReturnTrueWhenWordIsConnected() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+		board.placeWord(word, Direction.HORIZONTAL, 7, 7);
+
+		boolean result = board.playedWordIsConnectedToTheRest(word, 7, 8, Direction.HORIZONTAL);
+
+		assertTrue(result);
+	}
+
+	@Test
+	public void playedWordIsConnectedToTheRestShouldReturnFalseWhenWordIsNotConnected() {
+		Board board = new Board();
+		List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+
+		boolean result = board.playedWordIsConnectedToTheRest(word, 7, 7, Direction.HORIZONTAL);
+
+		assertFalse(result);
 	}
 }

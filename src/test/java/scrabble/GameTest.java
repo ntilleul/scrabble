@@ -12,44 +12,13 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
-    @Test
-    public void firstWordIsOnStarShouldReturnTrueWhenWordIsOnStar() {
-        Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
 
-        boolean result = game.firstWordIsOnStar(word, 7, 7, Direction.HORIZONTAL);
-
-        assertTrue(result);
-    }
 
     @Test
-    public void firstWordIsOnStarShouldReturnFalseWhenWordIsNotOnStar() {
-        Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
-
-        boolean result = game.firstWordIsOnStar(word, 6, 6, Direction.HORIZONTAL);
-
-        assertFalse(result);
-    }
-
-    @Test
-    public void playedWordIsConnectedToTheRestShouldReturnTrueWhenWordIsConnected() {
+    public void playedWordIsWorth7() {
         Game game = new Game();
         List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
         game.getBoard().placeWord(word, Direction.HORIZONTAL, 7, 7);
-
-        boolean result = game.playedWordIsConnectedToTheRest(word, 7, 8, Direction.HORIZONTAL);
-
-        assertTrue(result);
-    }
-
-    @Test
-    public void playedWordIsConnectedToTheRestShouldReturnFalseWhenWordIsNotConnected() {
-        Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
-
-        boolean result = game.playedWordIsConnectedToTheRest(word, 7, 7, Direction.HORIZONTAL);
-
-        assertFalse(result);
+        game.countPointsWord(7, 7, word, Direction.HORIZONTAL);
     }
 }

@@ -164,10 +164,10 @@ public class Game {
 
             if (wordCount == 0) {
                 tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize()))
-                        || (!firstWordIsOnStar(word, x, y, direction));
+                        || (!board.firstWordIsOnStar(word, x, y, direction));
             } else {
                 tf = ((frontx < 'A') || (frontx > 'O')) || ((fronty < 1) || (fronty > board.getSize())
-                        || !(playedWordIsConnectedToTheRest(word, x, y, direction)));
+                        || !(board.playedWordIsConnectedToTheRest(word, x, y, direction)));
             }
 
             if (frontx < 'A' || frontx > 'O') {
@@ -175,9 +175,9 @@ public class Game {
             } else if (fronty < 1 || fronty > board.getSize()) {
                 System.out.println(
                         "Erreur : y doit être un entier entre 1 et " + Integer.toString(board.getSize()) + ".");
-            } else if (!firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
+            } else if (!board.firstWordIsOnStar(word, x, y, direction) && wordCount == 0) {
                 System.out.println("Erreur : le mot doit passer par la case centrale.");
-            } else if (!playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
+            } else if (!board.playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0) {
                 System.out.println("Erreur : le mot doit être connecté aux autres.");
             } else if (board.verifLetterIsOutOfBoard(word, direction, y, x)) {
                 System.out.println("Erreur : le mot est en dehors du plateau.");
@@ -203,49 +203,6 @@ public class Game {
 
         System.out.println("Vous avez gagné " + points + " points ce qui vous amène à un total de "
                 + player.getPoint() + " points.");
-    }
-
-    public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
-        if (dir.equals(Direction.HORIZONTAL)) {
-            if (x + word.size() < board.getMiddleSize() - 1 || x > board.getMiddleSize() - 1) {
-                return false;
-            }
-            for (int i = 0; i < word.size(); i++) {
-                if (x + i == board.getMiddleSize() - 1 && y == board.getMiddleSize() - 1) {
-                    return true;
-                }
-            }
-        } else {
-            if (y + word.size() < board.getMiddleSize() - 1 || y > board.getMiddleSize() - 1) {
-                return false;
-            }
-            for (int i = 0; i < word.size(); i++) {
-                if (y + i == board.getMiddleSize() - 1 && x == board.getMiddleSize() - 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean playedWordIsConnectedToTheRest(List<Letter> word, int x, int y, Direction dir) {
-        int i;
-        if (dir.equals(Direction.HORIZONTAL)) {
-            i = x;
-            do {
-                if (board.letterNextToCoord(y, i))
-                    return true;
-                i++;
-            } while (i < (word.size() + x));
-        } else {
-            i = y;
-            do {
-                if (board.letterNextToCoord(i, x))
-                    return true;
-                i++;
-            } while (i < (word.size() + y));
-        }
-        return false;
     }
 
     public int countPointsWord(int x, int y, List<Letter> word, Direction dir) {

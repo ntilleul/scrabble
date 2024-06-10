@@ -142,7 +142,7 @@ public class ScrabbleApp extends Application {
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
                     // TODO : ajouter points au bon joueur par la suite
-                    player1.addPoint(game.countPoints(word.getLetters(), player1, xBack, yBack, direction));
+                    player1.addPoint(game.countPoints(player1, xBack, yBack, direction));
                     updatePlayerScore(player1, lblPlayer1);
 
                     game.makerPlayerDraw(player1, word.size());

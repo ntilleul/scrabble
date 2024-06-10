@@ -178,20 +178,20 @@ public class Board {
 
 	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
 		if (dir.equals(Direction.HORIZONTAL)) {
-			if (x + word.size() < board.getMiddleSize() - 1 || x > board.getMiddleSize() - 1) {
+			if (x + word.size() < getMiddleSize() - 1 || x > getMiddleSize() - 1) {
 				return false;
 			}
 			for (int i = 0; i < word.size(); i++) {
-				if (x + i == board.getMiddleSize() - 1 && y == board.getMiddleSize() - 1) {
+				if (x + i == getMiddleSize() - 1 && y == getMiddleSize() - 1) {
 					return true;
 				}
 			}
 		} else {
-			if (y + word.size() < board.getMiddleSize() - 1 || y > board.getMiddleSize() - 1) {
+			if (y + word.size() < getMiddleSize() - 1 || y > getMiddleSize() - 1) {
 				return false;
 			}
 			for (int i = 0; i < word.size(); i++) {
-				if (y + i == board.getMiddleSize() - 1 && x == board.getMiddleSize() - 1) {
+				if (y + i == getMiddleSize() - 1 && x == getMiddleSize() - 1) {
 					return true;
 				}
 			}

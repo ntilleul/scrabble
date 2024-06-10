@@ -191,6 +191,7 @@ public class ScrabbleApp extends Application {
         Label lbl_direction = new Label("direction");
         ComboBox<String> cb_direction = new ComboBox<>();
         cb_direction.getItems().addAll("HORIZONTAL", "VERTICAL");
+        cb_direction.getSelectionModel().selectFirst();
         Label err_direction = new Label();
         err_direction.setTextFill(Color.RED);
 

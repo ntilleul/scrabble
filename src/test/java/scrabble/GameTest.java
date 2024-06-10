@@ -97,6 +97,9 @@ public class GameTest {
         assertFalse(isConnected);
     }
 
+
+    // test for verifWord
+
     @Test
     public void testWordIsEmpty() throws Exception {
         String word = "";
@@ -133,7 +136,7 @@ public class GameTest {
         player.getDeck().addLetter(Letter.F);
 
         String word = "A?B";
-        game.verifWord(word);
+        assertTrue(game.verifWord(word));
 
     }
 
@@ -157,6 +160,7 @@ public class GameTest {
             assertEquals("Vous ne possedez pas les lettres nécéssaire", e.getMessage());
         }
     }
+
 
     @Test
     public void testMakerPlayerDraw() {

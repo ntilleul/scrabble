@@ -75,7 +75,7 @@ public class Game {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public int nJokerInWord(String word) {

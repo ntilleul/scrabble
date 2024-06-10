@@ -32,7 +32,7 @@ public class GameTest {
     }
 
     @Test
-    public void playedWordIsWorth7() {
+    public void playedWordIsWorth66() {
         Game game = new Game();
         List<Letter> letters = Arrays.asList(Letter.A, Letter.B, Letter.C, Letter.D, Letter.E, Letter.F, Letter.G);
         Word word = new Word(letters);

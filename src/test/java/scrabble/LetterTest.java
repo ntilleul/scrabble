@@ -2,12 +2,14 @@ package scrabble;
 
 import org.junit.Test;
 import scrabble.model.game.Bag;
+import scrabble.model.game.Game;
 import scrabble.model.letter.Letter;
+
 import static org.junit.Assert.assertEquals;
 
 public class LetterTest {
-	
-	@Test
+
+    @Test
     public void testLetterValue() {
         Letter letterA = Letter.A;
         Letter letterB = Letter.B;
@@ -21,7 +23,7 @@ public class LetterTest {
     }
 
     @Test
-    public void testLetterPoints(){
+    public void testLetterPoints() {
         Letter letterA = Letter.A;
         Letter letterB = Letter.B;
 
@@ -33,9 +35,15 @@ public class LetterTest {
     }
 
     @Test
-    public void verificationOfNumberOfLetterInBagInInitialisation(){
-        Bag bag = new Bag();
-        int numberOfLetterInBag = bag.getLetters().size();
-        assertEquals(102, numberOfLetterInBag);
+    public void verificationOfNumberOfLetterInBagInInitialisation() {
+        Game game = new Game();
+        Bag bag = game.getBag();
+
+        int numberOfLetterInBag = 0;
+        for (Letter letter : Letter.values()) {
+            numberOfLetterInBag += letter.getNumber();
+        }
+
+        assertEquals(numberOfLetterInBag, bag.getLetters().size());
     }
 }

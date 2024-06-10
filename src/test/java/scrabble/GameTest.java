@@ -13,7 +13,6 @@ import scrabble.utilities.Exceptions.InsufficientLettersException;
 import scrabble.utilities.Exceptions.InvalidCharacterInWordException;
 import scrabble.utilities.Exceptions.InvalidPositionException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -235,9 +234,6 @@ public class GameTest {
         game.canPlay(word, x, y, direction);
 
         word = Arrays.asList(Letter.A, Letter.B, Letter.C);
-        x = 7;
-        y = 7;
-        direction = Direction.HORIZONTAL;
 
         try {
             game.canPlay(word, x, y, direction);

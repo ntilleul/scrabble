@@ -158,10 +158,10 @@ public class Board {
 	}
 
 	public boolean letterNextToCoord(int x, int y) {
-		Boolean letterUp;
-		Boolean letterDown;
-		Boolean letterRight;
-		Boolean letterLeft;
+		boolean letterUp;
+		boolean letterDown;
+		boolean letterRight;
+		boolean letterLeft;
 
 		try {
 			letterUp = !getTile(x, y - 1).isEmpty();

@@ -9,14 +9,12 @@ import scrabble.utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
 
     private Board board;
     private Bag bag;
     private Player player;
-    Scanner scanner = new Scanner(System.in);
     private static int wordCount = 0;
 
     public Game(String playerName) {
@@ -51,12 +49,6 @@ public class Game {
         player.draw(bag.getNLetters(nLetter));
     }
 
-    public void printPlayerdeck() {
-        System.out.println("\nAffichage de votre banc:");
-        player.getLetters().forEach(letter -> System.out.print(letter.getValue() + " "));
-        System.out.println();
-    }
-
     public Player getPlayer() {
         return this.player;
     }
@@ -68,7 +60,7 @@ public class Game {
     public boolean verifWord(String word) throws Exception {
         List<Letter> availableLetters = new ArrayList<>(player.getLetters());
 
-        if (word.equals(""))
+        if (word.isEmpty())
             throw new InvalidCharacterInWordException("Le mot est vide");
         for (int i = 0; i < word.length(); i++) {
             char letterChar = word.charAt(i);
@@ -101,56 +93,6 @@ public class Game {
         }
         return count;
     }
-
-    // public Word createWord(String word, List<Character> jokerChar) {
-    // List<Letter> letterList = new ArrayList<>();
-    // for (int i = 0; i < word.length(); i++) {
-    // char letterChar = word.charAt(i);
-    // Letter letter;
-    // if (letterChar == '?') {
-    // letter = Letter.JOKER;
-    // } else {
-    // letter = Letter.valueOf(Character.toString(letterChar));
-    // }
-    // letterList.add(letter);
-    // }
-    // return new Word(letterList, jokerChar);
-    // }
-
-    // public Word createWord(String word) {
-    //     return createWord(word, new ArrayList<>());
-    // }
-
-    // public void playWord(String stringInput) throws InvalidPositionException {
-    // int wordSize = stringInput.length();
-    // int wordPoints = 0;
-
-    // char tempC;
-    // String tempS = "";
-    // for (int i = 0; i < stringInput.length(); i++) {
-    // if (stringInput.charAt(i) == Letter.JOKER.getValue()) {
-    // tempC = Letter.changeJokerValue();
-    // tempS = tempS + tempC;
-    // } else {
-    // tempS = tempS + stringInput.charAt(i);
-    // }
-    // }
-    // stringInput = tempS;
-
-    // List<Letter> createdWord = createWord(stringInput);
-    // for (Letter letter : createdWord) {
-    // wordPoints = wordPoints + letter.getPoints();
-    // player.addPoint(letter.getPoints());
-    // player.getLetters().remove(letter);
-    // }
-
-    // if (player.getDeckSize() == 0) {
-    // wordPoints += 50;
-    // player.addPoint(50);
-    // }
-
-    // player.draw(bag.getNLetters(wordSize));
-    // }
 
     public boolean verifWin(Game game) {
         return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();

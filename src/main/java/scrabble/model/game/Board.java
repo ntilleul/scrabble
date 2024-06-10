@@ -99,9 +99,10 @@ public class Board {
 					placeLetter(word.getLetterAt(i), x, y + i, word.getJokerValueAt(i));
 				else
 					placeLetter(word.getLetterAt(i), x, y + i);
-			} else
+			} else {
 				while (!getTile(x + i, y).isEmpty()) {
 					x++;
+				}
 				Letter letter = word.getLetterAt(i);
 				if (letter == Letter.JOKER)
 					placeLetter(word.getLetterAt(i), x + i, y, word.getJokerValueAt(i));

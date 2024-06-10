@@ -22,7 +22,7 @@ public class BoardTest {
     }
 
     @Test
-    public void isTileMultiplierEquals1() {
+    public void isTileMultiplierEqualsTimes2ForWord() {
         Board board = new Board();
         Multiplier multiplier = board.getTile(1, 1).getMultiplier();
         assertEquals(Multiplier.WORD_2, multiplier);

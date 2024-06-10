@@ -39,29 +39,29 @@ public class ScrabbleApp extends Application {
         Label lblPlayer1 = new Label("Joueur 1: ");
         TextField tfPlayer1 = new TextField();
 
-        Label lblPlayer2 = new Label("Joueur 2: ");
-        TextField tfPlayer2 = new TextField();
+        // Label lblPlayer2 = new Label("Joueur 2: ");
+        // TextField tfPlayer2 = new TextField();
 
         HBox player1Box = new HBox(10, lblPlayer1, tfPlayer1);
-        HBox player2Box = new HBox(10, lblPlayer2, tfPlayer2);
+        // HBox player2Box = new HBox(10, lblPlayer2, tfPlayer2);
 
         Button valideButton = new Button("VALIDER");
         Label messageLabel = new Label();
         messageLabel.setTextFill(Color.RED);
         valideButton.setOnAction(event -> {
             String strPlayer1 = tfPlayer1.getText();
-            String strPlayer2 = tfPlayer2.getText();
+            // String strPlayer2 = tfPlayer2.getText();
 
-            if (strPlayer1.isEmpty() || strPlayer2.isEmpty()) {
+            if (strPlayer1.isEmpty()) {
                 messageLabel.setText("Veuillez remplir les champs pour les deux joueurs.");
             } else {
                 messageLabel.setText("");
                 setPlayerStage.close();
-                gameStage(strPlayer1, strPlayer2);
+                gameStage(strPlayer1);
             }
         });
 
-        VBox mainLayout = new VBox(20, titleLabel, player1Box, player2Box, valideButton, messageLabel);
+        VBox mainLayout = new VBox(20, titleLabel, player1Box, valideButton, messageLabel);
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.setStyle("-fx-padding: 25px;");
 
@@ -71,14 +71,12 @@ public class ScrabbleApp extends Application {
         setPlayerStage.show();
     }
 
-    private void gameStage(String strPlayer1, String strPlayer2) {
+    private void gameStage(String strPlayer1) {
         Stage secondaryStage = new Stage();
 
         Game game = new Game(strPlayer1);
 
         Player player1 = game.getPlayer();
-        List<Letter> ls = new ArrayList<>();
-        player1.draw(ls);
 
         Label lblPlayer1 = new Label("Score " + player1.getName() + " : " + player1.getPoint());
         lblPlayer1.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10px;");
@@ -141,7 +139,6 @@ public class ScrabbleApp extends Application {
                     board.placeWord(word, direction, yBack, xBack);
                     refreshBoardDisplay(board, gridPane);
                     game.incrementWordCount();
-                    // TODO : ajouter points au bon joueur par la suite
                     player1.addPoint(game.countPoints(player1, xBack, yBack, direction));
                     updatePlayerScore(player1, lblPlayer1);
 
@@ -167,16 +164,25 @@ public class ScrabbleApp extends Application {
         VBox.setMargin(tf_word, new Insets(0, 0, 0, 20));
 
         BorderPane root = new BorderPane();
-        root.setTop(lblTop);
+        HBox hbox = createTopCoordinatesHBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setTranslateX(20);
+        hbox.setTranslateY(20);
+        root.setTop(hbox);
+        VBox vboxLeft = createLeftCoordinatesVBox();
+        vboxLeft.setAlignment(Pos.CENTER_RIGHT);
+        vboxLeft.setTranslateX(170);
+        root.setLeft(vboxLeft);
+        root.setCenter(gridPane);
         BorderPane.setAlignment(lblTop, Pos.CENTER);
         root.setBottom(vbox);
         root.setCenter(gridPane);
 
         Scene scene = new Scene(root, 1000, 900);
-        root.setStyle("-fx-background-color: lightgrey;");
+        root.setStyle("-fx-background-color: lightgrey; -fx-alignment: center");
         secondaryStage.setTitle("Scrabble");
         secondaryStage.setScene(scene);
-        secondaryStage.setResizable(true);
+        secondaryStage.setResizable(false);
         secondaryStage.setAlwaysOnTop(true);
         secondaryStage.show();
     }
@@ -365,7 +371,7 @@ public class ScrabbleApp extends Application {
         });
 
         btn_annuler.setOnMouseClicked(event -> {
-            chars.clear();  // Clear the list to indicate cancellation
+            chars.clear(); // Clear the list to indicate cancellation
             stage.close();
         });
 
@@ -429,6 +435,33 @@ public class ScrabbleApp extends Application {
     public void updatePlayerScore(Player player, Label lblPlayer) {
         lblPlayer.setText("Score " + player.getName() + " : " + player.getPoint());
     }
+
+    private HBox createTopCoordinatesHBox() {
+        HBox topCoordinatesHBox = new HBox();
+        char columnChar = 'A';
+        for (int i = 0; i < Board.getSize(); i++) {
+            Label coordinateLabel = new Label(String.valueOf(columnChar));
+            coordinateLabel.setMinSize(TILE_SIZE, TILE_SIZE);
+            coordinateLabel.setMaxSize(TILE_SIZE, TILE_SIZE);
+            coordinateLabel.setStyle("-fx-border-color: transparent; -fx-alignment: center; -fx-padding: 5px;");
+            topCoordinatesHBox.getChildren().add(coordinateLabel);
+            columnChar++;
+        }
+        return topCoordinatesHBox;
+    }
+
+    private VBox createLeftCoordinatesVBox() {
+        VBox leftCoordinatesVBox = new VBox();
+        for (int i = 1; i <= Board.getSize(); i++) {
+            Label coordinateLabel = new Label(String.valueOf(i));
+            coordinateLabel.setMinSize(TILE_SIZE, TILE_SIZE);
+            coordinateLabel.setMaxSize(TILE_SIZE, TILE_SIZE);
+            coordinateLabel.setStyle("-fx-border-color: transparent; -fx-alignment: center; -fx-padding: 5px;");
+            leftCoordinatesVBox.getChildren().add(coordinateLabel);
+        }
+        return leftCoordinatesVBox;
+    }
+
 
     public static void main(String[] args) {
         launch(args);

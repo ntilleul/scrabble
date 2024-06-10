@@ -1,9 +1,5 @@
 package scrabble.model.letter;
 
-import java.util.Scanner;
-
-import scrabble.utilities.Utility;
-
 public enum Letter {
 
     A('A', 1, 9), B('B', 3, 2), C('C', 3, 2), D('D', 2, 3), E('E', 1, 15), F('F', 4, 2), G('G', 2, 2), H('H', 4, 2),
@@ -14,8 +10,6 @@ public enum Letter {
     private char value;
     private final int points;
     private int number;
-    private static boolean joker1Used = false;
-
     Letter(char value, int points, int number) {
         this.value = value;
         this.points = points;
@@ -42,27 +36,7 @@ public enum Letter {
         this.number++;
     }
 
-    public void setValue(char v) {
-        this.value = v;
-    }
-
-    public static void setJokerValue(char c) {
-        Letter.JOKER.setValue(c);
-    }
-
-    public static void resetJokerValue() {
-        Letter.JOKER.setValue('?');
-    }
-
     public String toString() {
         return Character.toString(value);
-    }
-
-    public static boolean isJoker1Used() {
-        return joker1Used;
-    }
-
-    public static void useJoker1() {
-        joker1Used = true;
     }
 }

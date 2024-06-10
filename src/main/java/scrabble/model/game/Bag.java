@@ -72,10 +72,4 @@ public class Bag {
         }
         return nLetters;
     }
-
-    public void printBag() {
-        System.out.println("\nAffichage du sac:");
-        letters.forEach(letter -> System.out.print(letter.getValue() + " "));
-        System.out.println();
-    }
 }

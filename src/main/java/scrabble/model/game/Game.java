@@ -27,10 +27,6 @@ public class Game {
         this("player");
     }
 
-    public void start() {
-        board.print();
-    }
-
     public void refillPlayerDeck() {
         // TODO modify for multiplayer in future
         int numPlayerLetters = player.getDeckSize();

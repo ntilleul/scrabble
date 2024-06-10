@@ -29,7 +29,7 @@ public class Player {
     }
 
     public List<Letter> getRid(List<Letter> letters) {
-        List<Letter> ls = new ArrayList<Letter>();
+        List<Letter> ls = new ArrayList<>();
         for (Letter letter : letters) {
             ls.add(deck.removeLetter(letter));
         }

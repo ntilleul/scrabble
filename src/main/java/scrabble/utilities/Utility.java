@@ -1,8 +1,6 @@
 package scrabble.utilities;
 
 import scrabble.model.game.Board;
-import scrabble.model.game.Game;
-import scrabble.model.letter.Letter;
 import scrabble.utilities.Exceptions.InvalidPositionException;
 
 import java.util.Arrays;

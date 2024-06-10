@@ -174,7 +174,7 @@ public class Game {
         wordCount++;
     }
 
-    public int countPoints(List<Letter> word, Player player, int x, int y, Direction direction) {
+    public int countPoints(Player player, int x, int y, Direction direction) {
         int wordPoints = 0;
         if (direction == Direction.HORIZONTAL) {
             while (x > 0 && !board.getTile(y, x - 1).isEmpty()) {

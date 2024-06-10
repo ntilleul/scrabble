@@ -176,9 +176,13 @@ public class Board {
 		return (letterDown || letterUp || letterLeft || letterRight);
 	}
 
+	public boolean doesWordShouldNotCoverMiddleStar(List<Letter> word, int coord) {
+		return (coord + word.size() < getMiddleSize() -1) || (coord > getMiddleSize() -1);
+	}
+
 	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
 		if (dir.equals(Direction.HORIZONTAL)) {
-			if (x + word.size() < getMiddleSize() - 1 || x > getMiddleSize() - 1) {
+			if (doesWordShouldNotCoverMiddleStar(word, x)) {
 				return false;
 			}
 			for (int i = 0; i < word.size(); i++) {
@@ -187,7 +191,7 @@ public class Board {
 				}
 			}
 		} else {
-			if (y + word.size() < getMiddleSize() - 1 || y > getMiddleSize() - 1) {
+			if (doesWordShouldNotCoverMiddleStar(word, y)) {
 				return false;
 			}
 			for (int i = 0; i < word.size(); i++) {

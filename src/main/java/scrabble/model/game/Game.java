@@ -28,7 +28,6 @@ public class Game {
     }
 
     public void refillPlayerDeck() {
-        // TODO modify for multiplayer in future
         int numPlayerLetters = player.getDeckSize();
         for (Letter letter : player.getLetters()) {
             bag.addLetters(letter);
@@ -119,7 +118,7 @@ public class Game {
                 x--;
             }
             int i = x;
-            while (x < board.getSize() && !board.getTile(y, i).isEmpty()) {
+            while (x < Board.getSize() && !board.getTile(y, i).isEmpty()) {
                 wordPoints += board.getTile(y, i).getLetter().getPoints();
                 i++;
             }
@@ -128,7 +127,7 @@ public class Game {
                 y--;
             }
             int i = y;
-            while (y < board.getSize() && !board.getTile(i, x).isEmpty()) {
+            while (y < Board.getSize() && !board.getTile(i, x).isEmpty()) {
                 wordPoints += board.getTile(i, x).getLetter().getPoints();
                 i++;
             }

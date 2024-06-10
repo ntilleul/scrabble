@@ -23,10 +23,10 @@ public class Word {
             Letter letter;
             if (letterChar == '?') {
                 letter = Letter.JOKER;
-                this.jokerValues.put(i, jokerValues.get(iJoker));
+                this.jokerValues.put(i, Character.toUpperCase(jokerValues.get(iJoker)));
                 iJoker++;
             } else {
-                letter = Letter.valueOf(Character.toString(letterChar));
+                letter = Letter.valueOf(Character.toString(letterChar).toUpperCase());
             }
             letters.add(letter);
         }
@@ -50,10 +50,6 @@ public class Word {
 
     public int size() {
         return letters.size();
-    }
-
-    public int nJoker() {
-        return jokerValues.size();
     }
 
     public Letter getLetterAt(int i) {

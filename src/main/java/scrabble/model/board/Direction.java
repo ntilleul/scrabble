@@ -1,4 +1,4 @@
-package scrabble.model.game;
+package scrabble.model.board;
 
 public enum Direction {
     HORIZONTAL("H"), VERTICAL("V");

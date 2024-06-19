@@ -1,6 +1,6 @@
-package scrabble.model.game;
+package scrabble.model.board;
 
-import scrabble.model.letter.Letter;
+import scrabble.model.words.Letter;
 
 public class Tile {
     private Multiplier multiplier;
@@ -11,34 +11,29 @@ public class Tile {
         this.multiplier = multiplier;
     }
 
-    public boolean letterIsJoker() {
-        return letter == Letter.JOKER;
-    }
-
     public Multiplier getMultiplier() {
         return multiplier;
+    }
+    public Letter getLetter() {
+        return letter;
+    }
+    public char getJokerValue() {
+        return jokerValue;
     }
 
     public void setMultiplier(Multiplier multiplier) {
         this.multiplier = multiplier;
     }
-
-    public Letter getLetter() {
-        return letter;
-    }
-
     public void setLetter(Letter letter) {
         this.letter = letter;
     }
-
-    public char getJokerValue() {
-        return jokerValue;
-    }
-
     public void setJokerValue(char c) {
         this.jokerValue = c;
     }
 
+    public boolean letterIsJoker() {
+        return letter == Letter.JOKER;
+    }
     public boolean isEmpty() {
         return letter == null;
     }

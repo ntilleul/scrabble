@@ -2,16 +2,16 @@ package scrabble;
 
 import org.junit.Before;
 import org.junit.Test;
-import scrabble.model.game.Direction;
+import scrabble.model.board.Direction;
 import scrabble.model.game.Game;
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
+import scrabble.model.words.Letter;
+import scrabble.model.words.Word;
 import scrabble.model.player.Deck;
 import scrabble.model.player.Player;
-import scrabble.model.game.Board;
-import scrabble.utilities.Exceptions.InsufficientLettersException;
-import scrabble.utilities.Exceptions.InvalidCharacterInWordException;
-import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.model.board.Board;
+import scrabble.utilities.exceptions.InsufficientLettersException;
+import scrabble.utilities.exceptions.InvalidCharacterInWordException;
+import scrabble.utilities.exceptions.InvalidPositionException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +58,7 @@ public class GameTest {
         board.getTile(7, 6).setLetter(Letter.H);
         board.getTile(7, 7).setLetter(Letter.E);
 
-        List<Letter> word = Arrays.asList(Letter.L, Letter.L, Letter.O);
+        Word word = new Word(Arrays.asList(Letter.L, Letter.L, Letter.O));
         boolean isConnected = game.getBoard().playedWordIsConnectedToTheRest(word, 8, 7, Direction.HORIZONTAL);
 
         assertTrue(isConnected);
@@ -69,7 +69,7 @@ public class GameTest {
         board.getTile(7, 0).setLetter(Letter.H);
         board.getTile(7, 1).setLetter(Letter.E);
 
-        List<Letter> word = Arrays.asList(Letter.L, Letter.L, Letter.O);
+        Word word = new Word(Arrays.asList(Letter.L, Letter.L, Letter.O));
         boolean isConnected = game.getBoard().playedWordIsConnectedToTheRest(word, 8, 7, Direction.HORIZONTAL);
 
         assertFalse(isConnected);
@@ -80,7 +80,7 @@ public class GameTest {
         board.getTile(6, 7).setLetter(Letter.H);
         board.getTile(7, 7).setLetter(Letter.E);
 
-        List<Letter> word = Arrays.asList(Letter.L, Letter.L, Letter.O);
+        Word word = new Word(Arrays.asList(Letter.L, Letter.L, Letter.O));
         boolean isConnected = game.getBoard().playedWordIsConnectedToTheRest(word, 7, 8, Direction.VERTICAL);
 
         assertTrue(isConnected);
@@ -91,7 +91,7 @@ public class GameTest {
         board.getTile(0, 7).setLetter(Letter.H);
         board.getTile(1, 7).setLetter(Letter.E);
 
-        List<Letter> word = Arrays.asList(Letter.L, Letter.L, Letter.O);
+        Word word = new Word(Arrays.asList(Letter.L, Letter.L, Letter.O));
         boolean isConnected = game.getBoard().playedWordIsConnectedToTheRest(word, 7, 8, Direction.VERTICAL);
 
         assertFalse(isConnected);
@@ -104,7 +104,7 @@ public class GameTest {
     public void testWordIsEmpty() throws Exception {
         String word = "";
         try {
-            game.verifWord(word);
+            game.verifyWord(word);
         } catch (InvalidCharacterInWordException e) {
             assertEquals("Le mot est vide", e.getMessage());
         }
@@ -115,7 +115,7 @@ public class GameTest {
         String word = "!";
 
         try {
-            game.verifWord(word);
+            game.verifyWord(word);
         } catch (InvalidCharacterInWordException e) {
             assertEquals("Votre mot contient des caractères invalides", e.getMessage());
         }
@@ -155,7 +155,7 @@ public class GameTest {
 
         String word = "ABCDEFZ";
         try {
-            game.verifWord(word);
+            game.verifyWord(word);
         } catch (InsufficientLettersException e) {
             assertEquals("Vous ne possedez pas les lettres nécéssaire", e.getMessage());
         }
@@ -168,7 +168,7 @@ public class GameTest {
         Player player = game.getPlayer();
         Deck deck = player.getDeck();
         int deckSize = deck.getLetters().size();
-        game.makerPlayerDraw(player, 1);
+        game.makePlayerDraw(player, 1);
         assertEquals(deckSize + 1, deck.getLetters().size());
     }
 
@@ -195,7 +195,7 @@ public class GameTest {
     public void testFirstWordNotOnStar() {
         // Arrange
         Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
         int x = 3;
         int y = 3;
         Direction direction = Direction.HORIZONTAL;
@@ -213,7 +213,7 @@ public class GameTest {
     public void testPlayedWordNotConnected() {
         // Arrange
         Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
         int x = 5;
         int y = 5;
         Direction direction = Direction.HORIZONTAL;
@@ -230,14 +230,14 @@ public class GameTest {
     public void testWordOutOfBoard() throws InvalidPositionException {
         // Arrange
         Game game = new Game();
-        List<Letter> word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        Word word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
         int x = 7; // Assumant le milieu de votre plateau
         int y = 7;
         Direction direction = Direction.HORIZONTAL;
 
         game.canPlay(word, x, y, direction);
 
-        word = Arrays.asList(Letter.A, Letter.B, Letter.C);
+        word = new Word(Arrays.asList(Letter.A, Letter.B, Letter.C));
 
         try {
             game.canPlay(word, x, y, direction);

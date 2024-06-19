@@ -1,9 +1,9 @@
-package scrabble.model.game;
+package scrabble.model.board;
 
 import java.util.List;
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
-import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.model.words.Letter;
+import scrabble.model.words.Word;
+import scrabble.utilities.exceptions.InvalidPositionException;
 
 public class Board {
 
@@ -12,16 +12,14 @@ public class Board {
 
 	public Board() {
 		board = new Tile[boardSize][boardSize];
-		for (int i = 0; i < boardSize; i++) {
-			for (int j = 0; j < boardSize; j++) {
-				board[i][j] = new Tile(Multiplier.DEFAULT);
+		for (int y = 0; y < boardSize; y++) {
+			for (int x = 0; x < boardSize; x++) {
+				board[x][y] = new Tile(Multiplier.DEFAULT);
 			}
 		}
 
 		board[7][7].setMultiplier(Multiplier.STAR);
-
 		initializeMultipliers();
-
 		completeSymmetry(board);
 
 	}
@@ -46,33 +44,30 @@ public class Board {
 		board[7][0].setMultiplier(Multiplier.WORD_3);
 		board[3][7].setMultiplier(Multiplier.LETTER_2);
 	}
-
 	private static void completeSymmetry(Tile[][] board) {
 		int size = board.length;
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				Multiplier multiplier = board[i][j].getMultiplier();
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				Multiplier multiplier = board[x][y].getMultiplier();
 				if (multiplier != null && multiplier != Multiplier.DEFAULT) {
-					board[j][i].setMultiplier(multiplier);
-					board[size - 1 - i][j].setMultiplier(multiplier);
-					board[j][size - 1 - i].setMultiplier(multiplier);
-					board[i][size - 1 - j].setMultiplier(multiplier);
-					board[size - 1 - j][i].setMultiplier(multiplier);
-					board[size - 1 - i][size - 1 - j].setMultiplier(multiplier);
-					board[size - 1 - j][size - 1 - i].setMultiplier(multiplier);
+					board[y][x].setMultiplier(multiplier);
+					board[size - 1 - x][y].setMultiplier(multiplier);
+					board[y][size - 1 - x].setMultiplier(multiplier);
+					board[x][size - 1 - y].setMultiplier(multiplier);
+					board[size - 1 - y][x].setMultiplier(multiplier);
+					board[size - 1 - x][size - 1 - y].setMultiplier(multiplier);
+					board[size - 1 - y][size - 1 - x].setMultiplier(multiplier);
 				}
 			}
 		}
 	}
 
-	public Tile getTile(int i, int j) {
-		return this.board[i][j];
+	public Tile getTile(int x, int y) {
+		return this.board[x][y];
 	}
-
 	public static int getSize() {
 		return boardSize;
 	}
-
 	public int getMiddleSize() {
 		return boardSize / 2 + 1;
 	}
@@ -81,58 +76,8 @@ public class Board {
 		getTile(x, y).setLetter(letter);
 		getTile(x, y).setJokerValue(jokerValue);
 	}
-
 	public void placeLetter(Letter letter, int x, int y) {
 		getTile(x, y).setLetter(letter);
-	}
-
-	public void placeWord(Word word, Direction direction, int x, int y) {
-		System.out.println(word.getJokerValues());
-		for (int i = 0; i < word.size(); i++) {
-			if (direction == Direction.HORIZONTAL) {
-				while (!getTile(x, y + i).isEmpty()) {
-					y++;
-				}
-				Letter letter = word.getLetterAt(i);
-				if (letter == Letter.JOKER)
-					placeLetter(word.getLetterAt(i), x, y + i, word.getJokerValueAt(i));
-				else
-					placeLetter(word.getLetterAt(i), x, y + i);
-			} else {
-				while (!getTile(x + i, y).isEmpty()) {
-					x++;
-				}
-				Letter letter = word.getLetterAt(i);
-				if (letter == Letter.JOKER)
-					placeLetter(word.getLetterAt(i), x + i, y, word.getJokerValueAt(i));
-				else
-					placeLetter(word.getLetterAt(i), x + i, y);
-			}
-		}
-	}
-
-	public boolean verifyLetterIsOutOfBoard(List<Letter> word, Direction direction, int x, int y)
-			throws InvalidPositionException {
-		for (int i = 0; i < word.size(); i++) {
-			if (direction == Direction.HORIZONTAL) {
-				try {
-					while (!getTile(x, y + i).isEmpty()) {
-						y++;
-					}
-				} catch (ArrayIndexOutOfBoundsException e) {
-					return true;
-				}
-			} else {
-				try {
-					while (!getTile(x + i, y).isEmpty()) {
-						x++;
-					}
-				} catch (ArrayIndexOutOfBoundsException e) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	public boolean letterNextToCoord(int x, int y) {
@@ -167,21 +112,20 @@ public class Board {
 
 		return (letterDown || letterUp || letterLeft || letterRight);
 	}
-
-	public boolean doesWordShouldNotCoverMiddleStar(List<Letter> word, int coord) {
-		return (coord + word.size() < getMiddleSize() -1) || (coord > getMiddleSize() -1);
+	public boolean isLetterOnStar(int coordinates1, int coordinates2, int position) {
+		return (coordinates1 + position == getMiddleSize()) && (coordinates2 == getMiddleSize());
 	}
 
-	public boolean isLetterOnStar(int coord1, int coord2, int pos) {
-		return (coord1 + pos == getMiddleSize() - 1) && (coord2 == getMiddleSize() - 1);
+	public boolean doesWordShouldNotCoverMiddleStar(Word word, int coordinates) {
+		return (coordinates + word.getSize() < getMiddleSize() -1) || (coordinates > getMiddleSize() -1);
 	}
 
-	public boolean firstWordIsOnStar(List<Letter> word, int x, int y, Direction dir) {
-		if (dir.equals(Direction.HORIZONTAL)) {
+	public boolean firstWordIsOnStar(Word word, int x, int y, Direction direction) {
+		if (direction.equals(Direction.HORIZONTAL)) {
 			if (doesWordShouldNotCoverMiddleStar(word, x)) {
 				return false;
 			}
-			for (int i = 0; i < word.size(); i++) {
+			for (int i = 0; i < word.getSize(); i++) {
 				if (isLetterOnStar(x, y, i)) {
 					return true;
 				}
@@ -190,7 +134,7 @@ public class Board {
 			if (doesWordShouldNotCoverMiddleStar(word, y)) {
 				return false;
 			}
-			for (int i = 0; i < word.size(); i++) {
+			for (int i = 0; i < word.getSize(); i++) {
 				if (isLetterOnStar(y, x, i)) {
 					return true;
 				}
@@ -198,24 +142,69 @@ public class Board {
 		}
 		return false;
 	}
-
-	public boolean playedWordIsConnectedToTheRest(List<Letter> word, int horCoord, int verCoord, Direction dir) {
+	public boolean playedWordIsConnectedToTheRest(Word word, int coordinatesX, int coordinatesY, Direction direction) {
 		int i;
-		if (dir.equals(Direction.HORIZONTAL)) {
-			i = horCoord;
+		if (direction.equals(Direction.HORIZONTAL)) {
+			i = coordinatesX;
 			do {
-				if (letterNextToCoord(verCoord, i))
+				if (letterNextToCoord(i, coordinatesY))
 					return true;
 				i++;
-			} while (i < (word.size() + horCoord));
+			} while (i < (word.getSize() + coordinatesX));
 		} else {
-			i = verCoord;
+			i = coordinatesY;
 			do {
-				if (letterNextToCoord(i, horCoord))
+				if (letterNextToCoord(coordinatesX, i))
 					return true;
 				i++;
-			} while (i < (word.size() + verCoord));
+			} while (i < (word.getSize() + coordinatesY));
 		}
 		return false;
+	}
+	public boolean verifyLetterIsOutOfBoard(Word word, Direction direction, int x, int y) throws InvalidPositionException {
+		for (int i = 0; i < word.getSize(); i++) {
+			if (direction.equals(Direction.HORIZONTAL)) {
+				try {
+					while (!getTile(x + i, y).isEmpty()) {
+						x++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					return true;
+				}
+			} else {
+				try {
+					while (!getTile(x, y + i).isEmpty()) {
+						y++;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public void placeWord(Word word, Direction direction, int x, int y) {
+		System.out.println(word.getJokerValues());
+		for (int i = 0; i < word.getSize(); i++) {
+			if (direction.equals(Direction.HORIZONTAL)) {
+				while (!getTile(x + i , y).isEmpty()) {
+					x++;
+				}
+				Letter letter = word.getLetterAt(i);
+				if (letter == Letter.JOKER)
+					placeLetter(word.getLetterAt(i), x + i, y, word.getJokerValueAt(i));
+				else
+					placeLetter(word.getLetterAt(i), x + i, y);
+			} else {
+				while (!getTile(x, y + i).isEmpty()) {
+					y++;
+				}
+				Letter letter = word.getLetterAt(i);
+				if (letter == Letter.JOKER)
+					placeLetter(word.getLetterAt(i), x, y + i, word.getJokerValueAt(i));
+				else
+					placeLetter(word.getLetterAt(i), x, y + i);
+			}
+		}
 	}
 }

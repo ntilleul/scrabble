@@ -1,6 +1,7 @@
-package scrabble.model.game;
+package scrabble.model.board;
 
 public enum Multiplier {
+
     DEFAULT("", "white"), LETTER_2("L2", "lightblue"), LETTER_3("L3", "blue"),
     WORD_2("M2", "pink"), WORD_3("M3", "red"), STAR("*", "pink");
 
@@ -15,7 +16,6 @@ public enum Multiplier {
     public String toString() {
         return string;
     }
-
     public String getColor() {
         return color;
     }

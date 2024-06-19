@@ -1,10 +1,12 @@
 package scrabble.model.game;
 
-import scrabble.model.letter.Letter;
+import scrabble.model.words.*;
 import scrabble.model.player.Player;
-import scrabble.utilities.Exceptions.InsufficientLettersException;
-import scrabble.utilities.Exceptions.InvalidCharacterInWordException;
-import scrabble.utilities.Exceptions.InvalidPositionException;
+import scrabble.model.board.Board;
+import scrabble.model.board.Direction;
+import scrabble.utilities.exceptions.InsufficientLettersException;
+import scrabble.utilities.exceptions.InvalidCharacterInWordException;
+import scrabble.utilities.exceptions.InvalidPositionException;
 import scrabble.utilities.Utility;
 
 import java.util.ArrayList;
@@ -16,13 +18,13 @@ public class Game {
     private Bag bag;
     private Player player;
     private static int wordCount = 0;
+    private static int defaultDeckSize = 7;
 
     public Game(String playerName) {
         board = new Board();
         bag = new Bag();
-        player = new Player(playerName, bag.getSevenLetters());
+        player = new Player(playerName, bag.getNLetters(defaultDeckSize));
     }
-
     public Game() {
         this("player");
     }
@@ -39,26 +41,27 @@ public class Game {
 
         player.draw(bag.getNLetters(numPlayerLetters));
     }
-
-    public void makerPlayerDraw(Player player, int nLetter) {
-        player.draw(bag.getNLetters(nLetter));
+    public void makePlayerDraw(Player player, int nLetter) {
+        getPlayer().draw(bag.getNLetters(nLetter));
     }
 
     public Player getPlayer() {
         return this.player;
     }
-
     public Bag getBag() {
         return this.bag;
     }
+    public Board getBoard() {
+        return this.board;
+    }
 
-    public boolean verifWord(String word) throws Exception {
+    public boolean verifyWord(String wordString) throws Exception {
         List<Letter> availableLetters = new ArrayList<>(player.getLetters());
 
-        if (word.isEmpty())
+        if (wordString.isEmpty())
             throw new InvalidCharacterInWordException("Le mot est vide");
-        for (int i = 0; i < word.length(); i++) {
-            char letterChar = word.charAt(i);
+        for (int i = 0; i < wordString.length(); i++) {
+            char letterChar = wordString.charAt(i);
             if (!Utility.verifyLetter(letterChar)) {
                 throw new InvalidCharacterInWordException("Votre mot contient des caractères invalides");
             } else {
@@ -77,11 +80,22 @@ public class Game {
         }
         return true;
     }
-
-    public int nJokerInWord(String word) {
+    public boolean verifyWin(Game game) {
+        return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();
+    }
+    public boolean canPlay(Word word, int x, int y, Direction direction) throws InvalidPositionException {
+        if (!board.firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
+            throw new InvalidPositionException("Le premier mot doit passer par le centre.");
+        else if (!board.playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
+            throw new InvalidPositionException("Le mot doit être connecté au autres");
+        else if (board.verifyLetterIsOutOfBoard(word, direction, x, y))
+            throw new InvalidPositionException("Le mot dépasse du plateau");
+        return true;
+    }
+    public int nJokerInWord(String wordString) {
         int count = 0;
-        for (int i = 0; i < word.length(); i++) {
-            char letterChar = word.charAt(i);
+        for (int i = 0; i < wordString.length(); i++) {
+            char letterChar = wordString.charAt(i);
             if (letterChar == '?') {
                 count++;
             }
@@ -89,46 +103,28 @@ public class Game {
         return count;
     }
 
-    public boolean verifWin(Game game) {
-        return game.getBag().getLetters().isEmpty() && game.getPlayer().isDeckEmpty();
-    }
-
-    public boolean canPlay(List<Letter> word, int x, int y, Direction direction) throws InvalidPositionException {
-        if (!board.firstWordIsOnStar(word, x, y, direction) && wordCount == 0)
-            throw new InvalidPositionException("Le premier mot doit passer par le centre.");
-        else if (!board.playedWordIsConnectedToTheRest(word, x, y, direction) && wordCount != 0)
-            throw new InvalidPositionException("Le mot doit être connecté au autres");
-        else if (board.verifyLetterIsOutOfBoard(word, direction, y, x))
-            throw new InvalidPositionException("Le mot dépasse du plateau");
-        return true;
-    }
-
-    public Board getBoard() {
-        return this.board;
-    }
-
     public void incrementWordCount() {
         wordCount++;
     }
 
-    public int countPoints(Player player, int x, int y, Direction direction) {
+    public int countPoints(Player player, int coordinatesX, int coordinatesY, Direction direction) {
         int wordPoints = 0;
         if (direction == Direction.HORIZONTAL) {
-            while (x > 0 && !board.getTile(y, x - 1).isEmpty()) {
-                x--;
+            while (coordinatesX > 0 && !board.getTile(coordinatesX - 1, coordinatesY).isEmpty()) {
+                coordinatesX--;
             }
-            int i = x;
-            while (x < Board.getSize() && !board.getTile(y, i).isEmpty()) {
-                wordPoints += board.getTile(y, i).getLetter().getPoints();
+            int i = coordinatesX;
+            while (coordinatesX < Board.getSize() && !board.getTile(i, coordinatesY).isEmpty()) {
+                wordPoints += board.getTile(i, coordinatesY).getLetter().getPoints();
                 i++;
             }
         } else {
-            while (y > 0 && !board.getTile(y - 1, x).isEmpty()) {
-                y--;
+            while (coordinatesY > 0 && !board.getTile(coordinatesX, coordinatesY - 1).isEmpty()) {
+                coordinatesY--;
             }
-            int i = y;
-            while (y < Board.getSize() && !board.getTile(i, x).isEmpty()) {
-                wordPoints += board.getTile(i, x).getLetter().getPoints();
+            int i = coordinatesY;
+            while (coordinatesY < Board.getSize() && !board.getTile(coordinatesX, i).isEmpty()) {
+                wordPoints += board.getTile(coordinatesX, i).getLetter().getPoints();
                 i++;
             }
         }

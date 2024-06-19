@@ -1,11 +1,11 @@
 package scrabble;
 
 import org.junit.Test;
-import scrabble.model.game.Board;
-import scrabble.model.game.Direction;
-import scrabble.model.game.Multiplier;
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
+import scrabble.model.board.Board;
+import scrabble.model.board.Direction;
+import scrabble.model.board.Multiplier;
+import scrabble.model.words.Letter;
+import scrabble.model.words.Word;
 
 import java.util.Arrays;
 import java.util.List;

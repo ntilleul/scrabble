@@ -2,8 +2,7 @@ package scrabble.model.player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import scrabble.model.letter.Letter;
+import scrabble.model.words.Letter;
 
 public class Player {
     private int point;
@@ -16,10 +15,25 @@ public class Player {
         point = 0;
     }
 
+    public String getName() {
+        return name;
+    }
+    public Deck getDeck() {
+        return deck;
+    }
+    public int getPoint() {
+        return point;
+    }
+    public int getDeckSize() {
+        return deck.getSize();
+    }
+    public List<Letter> getLetters() {
+        return deck.getLetters();
+    }
+
     public void setPoint(int point) {
         this.point = point;
     }
-
     public void addPoint(int amount) {
         point += amount;
     }
@@ -27,7 +41,6 @@ public class Player {
     public void clearDeck() {
         deck.clear();
     }
-
     public List<Letter> getRid(List<Letter> letters) {
         List<Letter> ls = new ArrayList<>();
         for (Letter letter : letters) {
@@ -35,34 +48,13 @@ public class Player {
         }
         return ls;
     }
-
     public void draw(List<Letter> letters) {
         for (Letter letter : letters) {
             deck.addLetter(letter);
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Deck getDeck() {
-        return deck;
-    }
-
-    public int getPoint() {
-        return point;
-    }
-
     public boolean isDeckEmpty() {
         return deck.isEmpty();
-    }
-
-    public int getDeckSize() {
-        return deck.size();
-    }
-
-    public List<Letter> getLetters() {
-        return deck.getLetters();
     }
 }

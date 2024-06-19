@@ -1,4 +1,4 @@
-package scrabble.utilities.Exceptions;
+package scrabble.utilities.exceptions;
 
 public class InvalidCharacterInWordException extends Exception {
     public InvalidCharacterInWordException() {

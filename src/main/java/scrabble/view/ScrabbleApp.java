@@ -1,4 +1,4 @@
-package scrabble.application;
+package scrabble.view;
 
 import javafx.application.Application;
 import javafx.event.Event;
@@ -17,16 +17,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import scrabble.model.game.*;
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
-import scrabble.model.player.Player;
-import scrabble.utilities.Exceptions.InvalidPositionException;
-import scrabble.utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import scrabble.model.game.Game;
+import scrabble.model.board.*;
+import scrabble.model.words.*;
+import scrabble.model.player.Player;
+import scrabble.utilities.Utility;
+import scrabble.utilities.exceptions.*;
+
 
 public class ScrabbleApp extends Application {
 
@@ -110,7 +112,7 @@ public class ScrabbleApp extends Application {
             err.setText("");
             String wordString = tf_word.getText().toUpperCase();
             try {
-                game.verifWord(wordString);
+                game.verifyWord(wordString);
                 Word word;
                 int nJoker = game.nJokerInWord(wordString);
                 if (nJoker > 0) {
@@ -122,14 +124,14 @@ public class ScrabbleApp extends Application {
                     word = new Word(wordString, chars);
                 } else
                     word = new Word(wordString);
-                List<Object> pos = openPositionSelector(secondaryStage, game, word.getLetters());
-                if (pos.isEmpty()) {
+                List<Object> position = openPositionSelector(secondaryStage, game, word);
+                if (position.isEmpty()) {
                     err.setText("Sélection de position annulée.");
                     return;
                 }
-                Direction direction = (Direction) pos.get(0);
-                int xBack = (int) pos.get(1);
-                int yBack = (int) pos.get(2);
+                Direction direction = (Direction) position.get(0);
+                int xBack = (int) position.get(1);
+                int yBack = (int) position.get(2);
                 player1.getRid(word.getLetters());
                 board.placeWord(word, direction, yBack, xBack);
                 refreshBoardDisplay(board, gridPane);
@@ -137,11 +139,11 @@ public class ScrabbleApp extends Application {
                 player1.addPoint(game.countPoints(player1, xBack, yBack, direction));
                 updatePlayerScore(player1, lblPlayer1);
 
-                game.makerPlayerDraw(player1, word.size());
+                game.makePlayerDraw(player1, word.getSize());
                 deck.getChildren().clear();
                 deck.getChildren().addAll(getDeckPrinting(player1.getLetters()));
                 tf_word.clear();
-                if (game.verifWin(game)) {
+                if (game.verifyWin(game)) {
                     secondaryStage.close();
                     endGameStage(player1.getName(), player1.getPoint());
                 }
@@ -181,7 +183,7 @@ public class ScrabbleApp extends Application {
         secondaryStage.show();
     }
 
-    private List<Object> openPositionSelector(Stage primaryStage, Game game, List<Letter> word) {
+    private List<Object> openPositionSelector(Stage primaryStage, Game game, Word word) {
         List<Object> pos = new ArrayList<>();
 
         Stage stage = new Stage();

@@ -3,7 +3,7 @@ package scrabble;
 import org.junit.Test;
 import scrabble.model.game.Bag;
 import scrabble.model.game.Game;
-import scrabble.model.letter.Letter;
+import scrabble.model.words.Letter;
 import scrabble.model.player.Deck;
 
 import java.util.ArrayList;

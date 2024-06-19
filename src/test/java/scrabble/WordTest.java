@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import scrabble.model.letter.Letter;
-import scrabble.model.letter.Word;
+import scrabble.model.words.Letter;
+import scrabble.model.words.Word;
 
 public class WordTest {
 

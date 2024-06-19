@@ -1,7 +1,6 @@
 package scrabble.model.game;
 
 import java.util.List;
-
 import scrabble.model.letter.Letter;
 import scrabble.model.letter.Word;
 import scrabble.utilities.Exceptions.InvalidPositionException;

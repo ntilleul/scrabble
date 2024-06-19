@@ -133,7 +133,7 @@ public class ScrabbleApp extends Application {
                 int xBack = (int) position.get(1);
                 int yBack = (int) position.get(2);
                 player1.getRid(word.getLetters());
-                board.placeWord(word, direction, yBack, xBack);
+                board.placeWord(word, direction, xBack, yBack);
                 refreshBoardDisplay(board, gridPane);
                 game.incrementWordCount();
                 player1.addPoint(game.countPoints(player1, xBack, yBack, direction));
@@ -313,7 +313,7 @@ public class ScrabbleApp extends Application {
                                 + tile.getMultiplier().getColor());
                 if (tile.getMultiplier().equals(Multiplier.LETTER_3) || tile.getMultiplier().equals(Multiplier.WORD_3))
                     label.setTextFill(Color.WHITE);
-                gridPane.add(label, j + 1, i + 1);
+                gridPane.add(label, i + 1, j + 1);
             }
         }
         return gridPane;

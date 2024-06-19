@@ -12,8 +12,8 @@ public class Board {
 
 	public Board() {
 		board = new Tile[boardSize][boardSize];
-		for (int y = 0; y < boardSize; y++) {
-			for (int x = 0; x < boardSize; x++) {
+		for (int x = 0; x < boardSize; x++) {
+			for (int y = 0; y < boardSize; y++) {
 				board[x][y] = new Tile(Multiplier.DEFAULT);
 			}
 		}
@@ -112,8 +112,8 @@ public class Board {
 
 		return (letterDown || letterUp || letterLeft || letterRight);
 	}
-	public boolean isLetterOnStar(int coordinates1, int coordinates2, int position) {
-		return (coordinates1 + position == getMiddleSize()) && (coordinates2 == getMiddleSize());
+	public boolean isLetterOnStar(int fixedCoordinates, int position) {
+		return (fixedCoordinates + position == getMiddleSize() - 1 );
 	}
 
 	public boolean doesWordShouldNotCoverMiddleStar(Word word, int coordinates) {
@@ -122,20 +122,20 @@ public class Board {
 
 	public boolean firstWordIsOnStar(Word word, int x, int y, Direction direction) {
 		if (direction.equals(Direction.HORIZONTAL)) {
-			if (doesWordShouldNotCoverMiddleStar(word, x)) {
+			if (doesWordShouldNotCoverMiddleStar(word, x) || (y != getMiddleSize() - 1)) {
 				return false;
 			}
 			for (int i = 0; i < word.getSize(); i++) {
-				if (isLetterOnStar(x, y, i)) {
+				if (isLetterOnStar(y, i)) {
 					return true;
 				}
 			}
 		} else {
-			if (doesWordShouldNotCoverMiddleStar(word, y)) {
+			if (doesWordShouldNotCoverMiddleStar(word, y) || (y != getMiddleSize() - 1)) {
 				return false;
 			}
 			for (int i = 0; i < word.getSize(); i++) {
-				if (isLetterOnStar(y, x, i)) {
+				if (isLetterOnStar(x, i)) {
 					return true;
 				}
 			}

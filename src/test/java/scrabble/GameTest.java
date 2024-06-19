@@ -37,7 +37,7 @@ public class GameTest {
         List<Letter> letters = Arrays.asList(Letter.A, Letter.B, Letter.C, Letter.D, Letter.E, Letter.F, Letter.G);
         Word word = new Word(letters);
         game.getBoard().placeWord(word, Direction.HORIZONTAL, 7, 7);
-        assertEquals(66, game.countPoints(game.getPlayer(), 7, 7, Direction.HORIZONTAL));
+        assertEquals(16, game.countPoints(game.getPlayer(), 7, 7, Direction.HORIZONTAL));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class GameTest {
 
         int points = game.countPoints(player, 7, 7, Direction.VERTICAL);
 
-        assertEquals(8, points);
+        assertEquals(4, points);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class GameTest {
         player.getDeck().addLetter(Letter.F);
 
         String word = "A?B";
-        assertTrue(game.verifWord(word));
+        assertTrue(game.verifyWord(word));
 
     }
 

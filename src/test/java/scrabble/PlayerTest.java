@@ -18,14 +18,14 @@ public class PlayerTest {
     public void haveSevenLetters() {
         Bag testBag = new Bag();
         List<Letter> sevenLetters = new ArrayList<>();
-        sevenLetters = testBag.getSevenLetters();
+        sevenLetters = testBag.getNLetters(7);
         assertEquals(0, sevenLetters.size());
     }
 
     @Test
     public void refillDeck() {
         Game testGame = new Game();
-        Deck oldDeck = new Deck(testGame.getBag().getSevenLetters());
+        Deck oldDeck = new Deck(testGame.getBag().getNLetters(7));
         oldDeck.getLetters().clear();
         for (Letter letter : testGame.getPlayer().getDeck().getLetters()) {
             oldDeck.addLetter(letter);
